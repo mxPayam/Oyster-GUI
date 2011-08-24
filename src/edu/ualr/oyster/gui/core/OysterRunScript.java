@@ -50,7 +50,7 @@ import edu.ualr.oyster.gui.OysterEnum.LogExplanation;
  */
 public class OysterRunScript {
 	/**
-	 * All the OYSTER XML documents begin with an XML declaration and a comment
+	 * All the OYSTER XML documents begin with an XML declaration and a commentRunScript
 	 * section. The XML declaration is required and must be included exactly as
 	 * follows:
 	 * 
