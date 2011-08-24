@@ -1,0 +1,97 @@
+
+
+			    Oyster GUI Scriptor v.0.3.1
+
+				README.
+
+			    August 2011
+
+
+Thank you for installing Oyster!  
+This README file contains important information that you should read before using 
+Oyster GUI Scriptor 0.3.1
+
+
+Contents
+1.  Product name and version number
+2.  Company name
+3.  What is Oyster GUI Scriptor?
+4.  New and special in this release
+5.  Hardware and software requirements
+6.  Installation instructions, getting started tips, and documentation
+7.  Usage Notes
+8.  Important known problems
+9.  Version history
+10. Pricing information
+11. Contact information
+12. Copyright
+
+
+
+1.  Product name and version number
+    Open-System Entity Resolution (Oyster) GUI Scriptor - current version 0.3.1
+    
+    
+2.  Company name
+    ERIQ Research Center at the University of Arkansas at Little Rock
+    http://ualr.edu/eriq/
+    
+    
+3.  What is Oyster GUI Scriptor?
+    Oyster GUI Scriptor is a working Open sourced, java-based GUI for Open-System Entity Resolution (Oyster)
+	-entity resolution engine that is accessible as an instructional tool and has the ability to perform identity capture, identity resolution and identity management.  
+    
+    
+4.  New and special in this release
+    Oyster GUI Scriptor now creates RunScript.xml and SourceDescriptor.xml files.
+    
+    
+5.  Hardware and software requirements
+    Oyster GUI Scriptor currently runs on Windows XP or greater or Linux CentOS release 5.5 and requires Java 1.6.
+    
+    
+6.  Installation instructions, getting started tips, and documentation
+    There is no installation for Oyster GUI Scriptor. All that is required is to unzip the download in the directory of your choose.
+        
+    Java must be installed in order for the Oyster GUI Scriptor jar file to run. If you are unsure if java is installed on your machine type java at the command line if java is installed you will see the java usage. To get the latest version of the java runtime go to http://java.sun.com.
+    
+    
+7.  Usage Notes
+    1. Oyster GUI Scriptor can be run from the command line by typing:
+       java -jar Oyster GUI Scriptor.jar
+    
+    
+8.  Important known problems
+    No currently known problems.
+    
+    
+9.  Version history
+    2011/08/24 v.0.3.1
+    
+    
+10. Pricing information
+    Oyster GUI Scriptor is 100% open source and as such there is no cost for its use.
+    
+    
+11. Contact information
+    http://ualr.edu/eriq/
+    Dr. John R. Talburt
+    Director Center for Advanced Research in Entity Resolution and
+    Information Quality
+    University of Arkansas at Little Rock.
+    PO Box 1259
+    Little Rock, AR 72203
+    501-371-7616 (Office)
+    jrtalburt@ualr.edu
+
+    Eric D. Nelson
+    ednelson@ualr.edu
+	
+	Payam Mahmoudian
+	pxmahmoudian@ualr.edu
+    
+    
+12. Copyright
+    Oyster GUI Scriptor is distributed under the GNU Lesser General Public License. 
+    You should have received a copy of the GNU Lesser General Public License along with Oyster GUI Scriptor. 
+	If not, see <http://www.gnu.org/licenses/>.
