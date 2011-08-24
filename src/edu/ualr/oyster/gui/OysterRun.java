@@ -244,10 +244,7 @@ public class OysterRun {
 		frm_OysterGUIScriptor = new JFrame();
 		Color color = new Color(230, 230, 230);
 		frm_OysterGUIScriptor.getContentPane().setBackground(color);
-		frm_OysterGUIScriptor.setIconImage(Toolkit.getDefaultToolkit()
-				.getImage(
-						OysterRun.class
-								.getResource("/edu/ualr/oyster/gui/icon.png")));
+		frm_OysterGUIScriptor.setIconImage(Toolkit.getDefaultToolkit().getImage(OysterRun.class.getResource("/edu/ualr/oyster/gui/icon.png")));
 		frm_OysterGUIScriptor.setTitle("Oyster GUI Scriptor");
 		frm_OysterGUIScriptor.setBounds(100, 100, 1155, 562);
 		frm_OysterGUIScriptor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
