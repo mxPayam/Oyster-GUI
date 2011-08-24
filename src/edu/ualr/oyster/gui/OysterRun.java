@@ -20,6 +20,7 @@
  */
 package edu.ualr.oyster.gui;
 
+
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -70,7 +71,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.html.Option;
- 
+
 import edu.ualr.oyster.gui.OysterEnum.EREngineType;
 import edu.ualr.oyster.gui.OysterEnum.IdentityInputType;
 import edu.ualr.oyster.gui.OysterEnum.IdentityOutputType;
@@ -91,6 +92,7 @@ import javax.swing.JCheckBox;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 
 /**
  * OysterRun.java
@@ -214,7 +216,7 @@ public class OysterRun {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) { 
+	public static void main(String[] args) {
 		try {
 			UIManager
 					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -2513,11 +2515,12 @@ public class OysterRun {
 			fileopen.addChoosableFileFilter(filter);
 			File file = null;
 
-			int ret = fileopen.showDialog(null, "Select IdentityOutput");
+			int ret = fileopen.showDialog(null, "Create Identity Output");
 
 			if (ret == JFileChooser.APPROVE_OPTION) {
 				file = fileopen.getSelectedFile();
-				textRunScript_IdentityOutputPath.setText(file.getPath());
+				textRunScript_IdentityOutputPath
+						.setText(file.getAbsolutePath());
 				textRunScript_IdentityOutputPath.setEnabled(true);
 			}
 		}
@@ -2528,17 +2531,17 @@ public class OysterRun {
 
 			// Open file
 			JFileChooser fileopen = new JFileChooser();
-			fileopen.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			fileopen.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			FileFilter filter = new FileNameExtensionFilter(
 					"Oyster LinkOutput", "link");
 			fileopen.addChoosableFileFilter(filter);
 			File file = null;
 
-			int ret = fileopen.showDialog(null, "Select LinkOutput");
+			int ret = fileopen.showDialog(null, "Create Link Output");
 
 			if (ret == JFileChooser.APPROVE_OPTION) {
 				file = fileopen.getSelectedFile();
-				textRunScript_LinkOutputPath.setText(file.getPath());
+				textRunScript_LinkOutputPath.setText(file.getAbsolutePath());
 				textRunScript_LinkOutputPath.setEnabled(true);
 			}
 		}
@@ -2581,32 +2584,37 @@ public class OysterRun {
 						"xml");
 				chooser.addChoosableFileFilter(filter);
 				chooser.setDialogTitle("Save Oyster " + "\n"
-						+ "SourceDescriptor");
+						+ "Source Descriptor");
 
-				chooser.showSaveDialog(chooser);
+				if (chooser.showSaveDialog(chooser) == JFileChooser.APPROVE_OPTION) {
 
-				File fileRunScript = chooser.getSelectedFile();
-
-				// Create file if it does not exist
-				try {
-					boolean success = fileRunScript.createNewFile();
-					if (success) {
-						// File did not exist and was created
-						FileWriter fstream = new FileWriter(fileRunScript);
-						BufferedWriter out = new BufferedWriter(fstream);
-						// /out.write(OysterRunScriptXml.toString());
-						out.close();
-						JOptionPane
-								.showMessageDialog(frm_OysterGUIScriptor,
-										"Oyster SourceDescriptor xml File created successfully.");
-					} else {
-						// File already exists
-						JOptionPane.showMessageDialog(frm_OysterGUIScriptor,
-								"Oyster SourceDescriptor xml File already exists."
-										+ "\n" + "Change Document Name!");
+					File fileRunScript = chooser.getSelectedFile();
+					String filePath = fileRunScript.getPath();
+					if (!filePath.toLowerCase().endsWith(".xml")) {
+						fileRunScript = new File(filePath + ".xml");
 					}
-				} catch (Exception eRS) {
-					// TODO: handle exception
+					// Create file if it does not exist
+					try {
+						boolean success = fileRunScript.createNewFile();
+						if (success) {
+							// File did not exist and was created
+							FileWriter fstream = new FileWriter(fileRunScript);
+							BufferedWriter out = new BufferedWriter(fstream);
+							out.write(OysterRunScriptXml.toString());
+							out.close();
+							JOptionPane
+									.showMessageDialog(frm_OysterGUIScriptor,
+											"Oyster RunScript xml File created successfully.");
+						} else {
+							// File already exists
+							JOptionPane.showMessageDialog(
+									frm_OysterGUIScriptor,
+									"Oyster RunScript xml File already exists."
+											+ "\n" + "Change Document Name!");
+						}
+					} catch (Exception eRS) {
+						// TODO: handle exception
+					}
 				}
 			}
 
@@ -2620,30 +2628,36 @@ public class OysterRun {
 				chooser.addChoosableFileFilter(filter);
 				chooser.setDialogTitle("Save Oyster " + "\n" + "RunScript");
 
-				chooser.showSaveDialog(chooser);
 
-				File fileRunScript = chooser.getSelectedFile();
+				if (chooser.showSaveDialog(chooser) == JFileChooser.APPROVE_OPTION) {
 
-				// Create file if it does not exist
-				try {
-					boolean success = fileRunScript.createNewFile();
-					if (success) {
-						// File did not exist and was created
-						FileWriter fstream = new FileWriter(fileRunScript);
-						BufferedWriter out = new BufferedWriter(fstream);
-						out.write(OysterRunScriptXml.toString());
-						out.close();
-						JOptionPane
-								.showMessageDialog(frm_OysterGUIScriptor,
-										"Oyster RunScript xml File created successfully.");
-					} else {
-						// File already exists
-						JOptionPane.showMessageDialog(frm_OysterGUIScriptor,
-								"Oyster RunScript xml File already exists."
-										+ "\n" + "Change Document Name!");
+					File fileRunScript = chooser.getSelectedFile();
+					String filePath = fileRunScript.getPath();
+					if (!filePath.toLowerCase().endsWith(".xml")) {
+						fileRunScript = new File(filePath + ".xml");
 					}
-				} catch (Exception eRS) {
-					// TODO: handle exception
+					// Create file if it does not exist
+					try {
+						boolean success = fileRunScript.createNewFile();
+						if (success) {
+							// File did not exist and was created
+							FileWriter fstream = new FileWriter(fileRunScript);
+							BufferedWriter out = new BufferedWriter(fstream);
+							out.write(OysterRunScriptXml.toString());
+							out.close();
+							JOptionPane
+									.showMessageDialog(frm_OysterGUIScriptor,
+											"Oyster RunScript xml File created successfully.");
+						} else {
+							// File already exists
+							JOptionPane.showMessageDialog(
+									frm_OysterGUIScriptor,
+									"Oyster RunScript xml File already exists."
+											+ "\n" + "Change Document Name!");
+						}
+					} catch (Exception eRS) {
+						// TODO: handle exception
+					}
 				}
 			}
 		}
@@ -2712,30 +2726,31 @@ public class OysterRun {
 		if (identityInput.getType() == IdentityInputType.TextFile) {
 			identityInput.setAbsolutePath(textRunScript_IdentityInputPath
 					.getText());
-		} else if (identityInput.getType() == IdentityInputType.Database) {
-			identityInput.appendDatabaseProperties("<IdentityInput Type=\"");
-			identityInput.appendDatabaseProperties(IdentityInputType.Database
-					.toString());
-			identityInput.appendDatabaseProperties("\" Server=\"");
-			identityInput.appendDatabaseProperties(dbConfigIdentityInput
-					.getServer());
-			identityInput.appendDatabaseProperties("\" Port=\"");
-			identityInput.appendDatabaseProperties(dbConfigIdentityInput
-					.getPort());
-			identityInput.appendDatabaseProperties("\" SID=\"");
-			identityInput.appendDatabaseProperties(dbConfigIdentityInput
-					.getSID());
-			identityInput.appendDatabaseProperties("\" UserID=\"");
-			identityInput.appendDatabaseProperties(dbConfigIdentityInput
-					.getUserID());
-			identityInput.appendDatabaseProperties("\" Passwd=\"");
-			identityInput.appendDatabaseProperties(dbConfigIdentityInput
-					.getPassword());
-			identityInput.appendDatabaseProperties("\">");
-			identityInput.appendDatabaseProperties(dbConfigIdentityInput
-					.getTableName());
-			identityInput.appendDatabaseProperties("</IdentityInput>");
 		}
+		// else if (identityInput.getType() == IdentityInputType.Database) {
+		// identityInput.appendDatabaseProperties("<IdentityInput Type=\"");
+		// identityInput.appendDatabaseProperties(IdentityInputType.Database
+		// .toString());
+		// identityInput.appendDatabaseProperties("\" Server=\"");
+		// identityInput.appendDatabaseProperties(dbConfigIdentityInput
+		// .getServer());
+		// identityInput.appendDatabaseProperties("\" Port=\"");
+		// identityInput.appendDatabaseProperties(dbConfigIdentityInput
+		// .getPort());
+		// identityInput.appendDatabaseProperties("\" SID=\"");
+		// identityInput.appendDatabaseProperties(dbConfigIdentityInput
+		// .getSID());
+		// identityInput.appendDatabaseProperties("\" UserID=\"");
+		// identityInput.appendDatabaseProperties(dbConfigIdentityInput
+		// .getUserID());
+		// identityInput.appendDatabaseProperties("\" Passwd=\"");
+		// identityInput.appendDatabaseProperties(dbConfigIdentityInput
+		// .getPassword());
+		// identityInput.appendDatabaseProperties("\">");
+		// identityInput.appendDatabaseProperties(dbConfigIdentityInput
+		// .getTableName());
+		// identityInput.appendDatabaseProperties("</IdentityInput>");
+		// }
 
 		/*
 		 * Identity Output
@@ -2851,19 +2866,20 @@ public class OysterRun {
 			OysterRunScriptXml.append("<IdentityInput Type=\""
 					+ IdentityInputType.TextFile.toString() + "\">"
 					+ identityInput.getAbsolutePath() + "</IdentityInput>");
-		} else if (identityInput.getType() == IdentityInputType.Database) {
-			OysterRunScriptXml
-					.append("<IdentityInput Type=\""
-							+ IdentityInputType.Database + "\" Server=\""
-							+ dbConfigIdentityInput.getServer() + "\" Port=\""
-							+ dbConfigIdentityInput.getPort() + "\" SID=\""
-							+ dbConfigIdentityInput.getSID() + "\" UserID=\""
-							+ dbConfigIdentityInput.getUserID()
-							+ "\" Passwd=\""
-							+ dbConfigIdentityInput.getPassword() + "\">"
-							+ dbConfigIdentityInput.getTableName()
-							+ "</IdentityInput>");
 		}
+		// else if (identityInput.getType() == IdentityInputType.Database) {
+		// OysterRunScriptXml
+		// .append("<IdentityInput Type=\""
+		// + IdentityInputType.Database + "\" Server=\""
+		// + dbConfigIdentityInput.getServer() + "\" Port=\""
+		// + dbConfigIdentityInput.getPort() + "\" SID=\""
+		// + dbConfigIdentityInput.getSID() + "\" UserID=\""
+		// + dbConfigIdentityInput.getUserID()
+		// + "\" Passwd=\""
+		// + dbConfigIdentityInput.getPassword() + "\">"
+		// + dbConfigIdentityInput.getTableName()
+		// + "</IdentityInput>");
+		// }
 
 		// Identity Output
 		OysterRunScriptXml.append("\n");
@@ -3008,7 +3024,7 @@ public class OysterRun {
 	private JScrollPane getScrollPaneRunScript_ReferenceSources() {
 		if (scrollPaneRunScript_ReferenceSources == null) {
 			scrollPaneRunScript_ReferenceSources = new JScrollPane();
-			scrollPaneRunScript_ReferenceSources.setBounds(10, 75, 398, 107);
+			scrollPaneRunScript_ReferenceSources.setBounds(10, 60, 398, 122);
 			scrollPaneRunScript_ReferenceSources.setOpaque(false);
 			scrollPaneRunScript_ReferenceSources.setViewportBorder(null);
 			scrollPaneRunScript_ReferenceSources
@@ -3026,27 +3042,21 @@ public class OysterRun {
 					.setSelectionBackground(Color.LIGHT_GRAY);
 			tableRunScript_ReferenceSources.setRowHeight(20);
 			tableRunScript_ReferenceSources.setModel(new DefaultTableModel(
-					new Object[][] { { null, null, null, null, null },
-							{ null, null, null, null, null },
-							{ null, null, null, null, null },
-							{ null, null, null, null, null }, }, new String[] {
-							"Select", "Source Name", "Source Type",
-							"File Path", "Capture" }) {
+					new String[] { "Capture", "Source Name", "Source Type",
+							"File Path" },
+					tableRunScript_ReferenceSources_RowNum) {
 				Class[] columnTypes = new Class[] { Boolean.class,
-						String.class, String.class, String.class, Boolean.class };
+						String.class, String.class, String.class };
 
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
 			});
+
 			tableRunScript_ReferenceSources.getColumnModel().getColumn(0)
-					.setResizable(false);
+					.setPreferredWidth(50);
 			tableRunScript_ReferenceSources.getColumnModel().getColumn(0)
-					.setPreferredWidth(40);
-			tableRunScript_ReferenceSources.getColumnModel().getColumn(0)
-					.setMinWidth(40);
-			tableRunScript_ReferenceSources.getColumnModel().getColumn(0)
-					.setMaxWidth(40);
+					.setMaxWidth(50);
 			tableRunScript_ReferenceSources.getColumnModel().getColumn(1)
 					.setMaxWidth(75);
 			tableRunScript_ReferenceSources.getColumnModel().getColumn(2)
@@ -3055,10 +3065,6 @@ public class OysterRun {
 					.setMaxWidth(70);
 			tableRunScript_ReferenceSources.getColumnModel().getColumn(3)
 					.setPreferredWidth(80);
-			tableRunScript_ReferenceSources.getColumnModel().getColumn(4)
-					.setPreferredWidth(50);
-			tableRunScript_ReferenceSources.getColumnModel().getColumn(4)
-					.setMaxWidth(50);
 		}
 		return tableRunScript_ReferenceSources;
 	}
@@ -3170,6 +3176,8 @@ public class OysterRun {
 					.add(getBtnRunScript_ReferenceSourcesLoad());
 			panelRunScript_ReferenceSources
 					.add(getScrollPaneRunScript_ReferenceSources());
+			panelRunScript_ReferenceSources
+					.add(getBtnRunScript_ReferenceSourcesRemove());
 		}
 		return panelRunScript_ReferenceSources;
 	}
@@ -3180,7 +3188,7 @@ public class OysterRun {
 					"Load Source Descriptor File");
 			btnRunScript_ReferenceSourcesLoad
 					.addActionListener(new BtnRunScript_ReferenceSourcesLoadAction());
-			btnRunScript_ReferenceSourcesLoad.setBounds(10, 26, 163, 38);
+			btnRunScript_ReferenceSourcesLoad.setBounds(10, 26, 163, 23);
 		}
 		return btnRunScript_ReferenceSourcesLoad;
 	}
@@ -3215,17 +3223,18 @@ public class OysterRun {
 				// + referenceItem.next().getData());
 				// }
 
-				tableRunScript_ReferenceSources.setValueAt(
-						referenceSource.getSourceName(),
-						tableRunScript_ReferenceSources_RowNum, 1);
-				tableRunScript_ReferenceSources.setValueAt(
-						referenceSource.getSourceType(),
-						tableRunScript_ReferenceSources_RowNum, 2);
-				tableRunScript_ReferenceSources.setValueAt(
-						file.getAbsolutePath(),
-						tableRunScript_ReferenceSources_RowNum, 3);
-
-				tableRunScript_ReferenceSources_RowNum++;
+				XMLtoDescription(file, tableRunScript_ReferenceSources);
+				// tableRunScript_ReferenceSources.setValueAt(
+				// referenceSource.getSourceName(),
+				// tableRunScript_ReferenceSources_RowNum, 1);
+				// tableRunScript_ReferenceSources.setValueAt(
+				// referenceSource.getSourceType(),
+				// tableRunScript_ReferenceSources_RowNum, 2);
+				// tableRunScript_ReferenceSources.setValueAt(
+				// file.getAbsolutePath(),
+				// tableRunScript_ReferenceSources_RowNum, 3);
+				//
+				// tableRunScript_ReferenceSources_RowNum++;
 			}
 		}
 	}
@@ -3541,6 +3550,7 @@ public class OysterRun {
 	}
 
 	private OysterReferenceSource oysterReferenceSource = new OysterReferenceSource();
+	private JButton btnRunScript_ReferenceSourcesRemove;
 
 	private class BtnSourceDescriptor_CreateSourcedescriptorAction implements
 			ActionListener {
@@ -3586,25 +3596,34 @@ public class OysterRun {
 		// <OysterRunScript> start Tag
 		OysterSourceDescriptorXml.append("<OysterSourceDescriptor>");
 		OysterSourceDescriptorXml.append("\n");
-		
+
 		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml.append("<!-- Types of Sources (Only one can be defined) -->");
+		OysterSourceDescriptorXml
+				.append("<!-- Types of Sources (Only one can be defined) -->");
 		OysterSourceDescriptorXml.append("\n");
 		OysterSourceDescriptorXml.append("    ");
-		
+
 		String sourceType = oysterReferenceSource.getSourceType();
-		
-		if(sourceType == "Databse") {
-			
-		}else if(sourceType == "FileFixed") {
-			
-		}else if(sourceType == "FileDelim") {
-			OysterSourceDescriptorXml.append("<Source Type=\"FileDelim\" Char=\"" + oysterReferenceSource.getDelimiter() + "\" Qual=\"" + oysterReferenceSource.getQualifier() + "\" Labels=\"" + "Y" + "\">" + oysterReferenceSource.getSourcePath() + "</Source>");
+
+		if (sourceType == "Databse") {
+
+		} else if (sourceType == "FileFixed") {
+
+		} else if (sourceType == "FileDelim") {
+			OysterSourceDescriptorXml
+					.append("<Source Type=\"FileDelim\" Char=\""
+							+ oysterReferenceSource.getDelimiter()
+							+ "\" Qual=\""
+							+ oysterReferenceSource.getQualifier()
+							+ "\" Labels=\"" + "Y" + "\">"
+							+ oysterReferenceSource.getSourcePath()
+							+ "</Source>");
 		}
 		OysterSourceDescriptorXml.append("\n");
 		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("    ");		
-		OysterSourceDescriptorXml.append("<!-- Items in Source (One for each item in the source including reference identifier) -->");
+		OysterSourceDescriptorXml.append("    ");
+		OysterSourceDescriptorXml
+				.append("<!-- Items in Source (One for each item in the source including reference identifier) -->");
 		OysterSourceDescriptorXml.append("\n");
 		OysterSourceDescriptorXml.append("    ");
 		OysterSourceDescriptorXml.append("<ReferenceItems>");
@@ -3614,9 +3633,9 @@ public class OysterRun {
 		OysterSourceDescriptorXml.append("\n");
 		OysterSourceDescriptorXml.append("    ");
 		OysterSourceDescriptorXml.append("</ReferenceItems>");
-		OysterSourceDescriptorXml.append("\n");		
+		OysterSourceDescriptorXml.append("\n");
 		OysterSourceDescriptorXml.append("</OysterSourceDescriptor>");
-		
+
 		JOptionPane.showMessageDialog(frm_OysterGUIScriptor,
 				OysterSourceDescriptorXml.toString());
 	}
@@ -3663,9 +3682,9 @@ public class OysterRun {
 							.getValueAt(0, 7));
 
 			// -------------------------------------------------------------------//
-			
-			//tableSourceDescriptor_DetailDatabase.getValueAt(0, 0));
-			
+
+			// tableSourceDescriptor_DetailDatabase.getValueAt(0, 0));
+
 		} else if (tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 1) {
 			oysterReferenceSource.setSourceType("FileFixed");
 			oysterReferenceSource
@@ -3675,7 +3694,7 @@ public class OysterRun {
 			oysterReferenceSource
 					.setSourcePath((String) tableSourceDescriptor_FileFixed
 							.getValueAt(0, 1));
-			// -------------------------------------------------------------------//			
+			// -------------------------------------------------------------------//
 		} else if (tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 2) {
 			oysterReferenceSource.setSourceType("FileDelim");
 			oysterReferenceSource
@@ -3773,5 +3792,86 @@ public class OysterRun {
 				}
 			}
 		}
+	}
+
+	private JButton getBtnRunScript_ReferenceSourcesRemove() {
+		if (btnRunScript_ReferenceSourcesRemove == null) {
+			btnRunScript_ReferenceSourcesRemove = new JButton(
+					"Remove Source Descriptor");
+			btnRunScript_ReferenceSourcesRemove
+					.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+
+							DefaultTableModel tm = (DefaultTableModel) tableRunScript_ReferenceSources
+									.getModel();
+							tm.removeRow(tableRunScript_ReferenceSources
+									.getSelectedRow());
+							tableRunScript_ReferenceSources_RowNum--;
+						}
+					});
+			btnRunScript_ReferenceSourcesRemove.setBounds(196, 26, 163, 23);
+		}
+		return btnRunScript_ReferenceSourcesRemove;
+	}
+
+	/*
+	 * TODO: Automatically populate the XML file information into the table
+	 */
+
+	public void XMLtoDescription(File file, JTable table) {
+
+		// Parse XML file
+		OysterReferenceSource ors = OysterSourceDescriptorParser.parse(file);
+
+		// Put data into the row
+
+		if (table == tableSourceDescriptor_Database) {
+
+			Object[] insertion = { "Source Name",
+					dbConfigRefrenceSource.getServer(),
+					dbConfigRefrenceSource.getPort(),
+					dbConfigRefrenceSource.getSID(),
+					dbConfigRefrenceSource.getTableName(),
+					dbConfigRefrenceSource.getUserID(),
+					dbConfigRefrenceSource.getPassword(),
+					dbConfigRefrenceSource.getConnectionType() };
+
+			for (int i = 0; i < table.getColumnCount(); i++) {
+				tableSourceDescriptor_Database.getModel().setValueAt(
+						insertion[i], tableSourceDescriptor_Database_RowNum, i);
+			}
+
+			tableSourceDescriptor_Database_RowNum++;
+
+		} else if (table == tableSourceDescriptor_FileDelim) {
+			tableSourceDescriptor_FileDelim.setValueAt(file.getPath(),
+					tableSourceDescriptor_FileDelim_RowNum, 1);
+
+			tableSourceDescriptor_DetailFileDelim_RowNum++;
+
+		} else if (table == tableSourceDescriptor_FileFixed) {
+			tableSourceDescriptor_FileFixed.setValueAt(file.getPath(),
+					tableSourceDescriptor_FileFixed_RowNum, 1);
+
+			Object[] insertion = { ors.getSourceName(), ors.getSourcePath() };
+
+			for (int i = 0; i < table.getColumnCount(); i++) {
+				tableSourceDescriptor_DetailFileFixed.getModel().setValueAt(
+						insertion[i],
+						tableSourceDescriptor_DetailFileFixed_RowNum, i);
+			}
+
+			tableSourceDescriptor_DetailFileFixed_RowNum++;
+		} else if (table == tableRunScript_ReferenceSources) {
+
+			Object[] insertion = { false, ors.getSourceName(),
+					ors.getSourceType(), ors.getSourcePath() };
+
+			DefaultTableModel tm = (DefaultTableModel) table.getModel();
+			tm.insertRow(tableRunScript_ReferenceSources_RowNum, insertion);
+
+			tableRunScript_ReferenceSources_RowNum++;
+		}
+
 	}
 }
