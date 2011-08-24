@@ -1913,8 +1913,6 @@ public class OysterRun {
 		if (scrollPaneSourceDescriptor_Database == null) {
 			scrollPaneSourceDescriptor_Database = new JScrollPane();
 			scrollPaneSourceDescriptor_Database
-					.addFocusListener(new ScrollPaneSourceDescriptor_DatabaseFocus());
-			scrollPaneSourceDescriptor_Database
 					.addComponentListener(new ScrollPaneSourceDescriptor_DatabaseComponent());
 			scrollPaneSourceDescriptor_Database
 					.setViewportView(getTableSourceDescriptor_Database());
@@ -2322,9 +2320,9 @@ public class OysterRun {
 	private int tableSourceDescriptor_FileDelim_RowNum = 0;
 	private int tableSourceDescriptor_FileFixed_RowNum = 0;
 	private int tableSourceDescriptor_Database_RowNum = 0;
-	
+
 	private int tableRunScript_ReferenceSources_RowNum = 0;
-	
+
 	private int tableSourceDescriptor_DetailFileDelim_RowNum = 0;
 	private int tableSourceDescriptor_DetailFileFixed_RowNum = 0;
 	private int tableSourceDescriptor_DetailDatabase_RowNum = 0;
@@ -2660,11 +2658,6 @@ public class OysterRun {
 	/**
 	 * 
 	 */
-	private void saveSourceDescriptor() {
-		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(frm_OysterGUIScriptor,
-				"saveSourceDescriptor()");
-	}
 
 	private void saveRunScript() {
 		// Make a new Date object. It will be initialized to
@@ -3541,58 +3534,85 @@ public class OysterRun {
 		}
 		return btnSourceDescriptor_CreateSourcedescriptor;
 	}
-	
+
 	private OysterReferenceSource oysterReferenceSource = new OysterReferenceSource();
-	
+
 	private class BtnSourceDescriptor_CreateSourcedescriptorAction implements
 			ActionListener {
-		
-		public void actionPerformed(ActionEvent arg0) {		
-			
 
-			
-			
-			if (tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 0) {
-				oysterReferenceSource.setSourceType("Databse");
-				oysterReferenceSource.setSourceName((String)tableSourceDescriptor_DetailDatabase.getValueAt(0, 0));
-				
-			}
-			else if (tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 1){
-				oysterReferenceSource.setSourceType("FileFixed");
-			}
-			else if (tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 2) {
-				oysterReferenceSource.setSourceType("FileDelim");
-			}
-			
-//			oysterReferenceSource.setSourceName(aSourceName);
-//			
-//			oysterReferenceSource.setServer(aServer);
-//			oysterReferenceSource.setPort(aPort);
-//			oysterReferenceSource.setSid(aSid);
-//			oysterReferenceSource.setTable(aTable);
-//			oysterReferenceSource.setUserID(aUserID);
-//			oysterReferenceSource.setPasswd(aPasswd);			
-//			oysterReferenceSource.setConnectionType(aConnectionType);
-//			
-//			oysterReferenceSource.setSourcePath(aSourcePath);
-//			
-//			oysterReferenceSource.setDelimiter(aDelimiter);
-//			oysterReferenceSource.setQualifier(aQualifier);			
-//			oysterReferenceSource.setLabel(aLabel);
-
-			JOptionPane
-			.showMessageDialog(frm_OysterGUIScriptor,
-					oysterReferenceSource.getSourceName());
-			
+		public void actionPerformed(ActionEvent arg0) {
+			createSourceDescriptor();
 			btnSave.setEnabled(true);
 		}
 	}
 
-	private class ScrollPaneSourceDescriptor_DatabaseFocus extends FocusAdapter {
-		@Override
-		public void focusGained(FocusEvent arg0) {
-			setSourceDescriptor_DatebaseConfig();
+	private void createSourceDescriptor() {
+		saveSourceDescriptor();
+		// clear the Stringbuffer content
+		OysterSourceDescriptorXml.delete(0, OysterSourceDescriptorXml.length());
+
+		// XML Declaration and Comments
+		OysterRunScriptXml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		
+		JOptionPane.showMessageDialog(frm_OysterGUIScriptor,
+				OysterRunScriptXml.toString());		
+	}
+
+	private void saveSourceDescriptor() {
+
+		if (tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 0) {
+			oysterReferenceSource.setSourceType("Databse");
+			oysterReferenceSource
+					.setSourceName((String) tableSourceDescriptor_Database
+							.getValueAt(0, 0));
+
+			oysterReferenceSource
+					.setServer((String) tableSourceDescriptor_Database
+							.getValueAt(0, 1));
+			oysterReferenceSource
+					.setPort((String) tableSourceDescriptor_Database
+							.getValueAt(0, 2));
+			oysterReferenceSource
+					.setSid((String) tableSourceDescriptor_Database
+							.getValueAt(0, 3));
+			oysterReferenceSource
+					.setTable((String) tableSourceDescriptor_Database
+							.getValueAt(0, 4));
+			oysterReferenceSource
+					.setUserID((String) tableSourceDescriptor_Database
+							.getValueAt(0, 5));
+			oysterReferenceSource
+					.setPasswd((String) tableSourceDescriptor_Database
+							.getValueAt(0, 6));
+			oysterReferenceSource
+					.setConnectionType((String) tableSourceDescriptor_Database
+							.getValueAt(0, 7));
+		} else if (tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 1) {
+			oysterReferenceSource.setSourceType("FileFixed");
+			oysterReferenceSource
+					.setSourceName((String) tableSourceDescriptor_FileFixed
+							.getValueAt(0, 0));
+
+			oysterReferenceSource
+					.setSourcePath((String) tableSourceDescriptor_FileFixed
+							.getValueAt(0, 1));
+		} else if (tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 2) {
+			oysterReferenceSource.setSourceType("FileDelim");
+			oysterReferenceSource
+					.setSourceName((String) tableSourceDescriptor_FileDelim
+							.getValueAt(0, 0));
+
+			oysterReferenceSource
+					.setSourcePath((String) tableSourceDescriptor_FileDelim
+							.getValueAt(0, 1));
 		}
+
+		//
+		// oysterReferenceSource.setDelimiter(aDelimiter);
+		// oysterReferenceSource.setQualifier(aQualifier);
+		// oysterReferenceSource.setLabel(aLabel);
+
+		
 	}
 
 	private JButton getBtnSourceDescriptor_RefreshDb() {
@@ -3644,30 +3664,27 @@ public class OysterRun {
 				treeViewer.createUI(file);
 
 				attributes = OysterAttributesParser.parse(file);
-				
+
 				Hashtable<OysterAttribute, OysterComparator> attrComp = attributes
 						.getAttrComp();
 				// Show all Attribute in the hash table.
 
 				Enumeration<OysterAttribute> Attributes;
 				Attributes = attrComp.keys();
-				int i=0;
-				String[] str = {""}; 
+				int i = 0;
+				String[] str = { "" };
 				while (Attributes.hasMoreElements()) {
-					str[i] =  Attributes.nextElement().getName();
-					//System.out.println(str[i]);
-					tableSourceDescriptor_DetailFileFixed.setValueAt(
-							str[i],
+					str[i] = Attributes.nextElement().getName();
+					// System.out.println(str[i]);
+					tableSourceDescriptor_DetailFileFixed.setValueAt(str[i],
 							tableSourceDescriptor_DetailFileFixed_RowNum, 1);
 					tableSourceDescriptor_DetailFileFixed_RowNum++;
-					
-					tableSourceDescriptor_DetailFileDelim.setValueAt(
-							str[i],
+
+					tableSourceDescriptor_DetailFileDelim.setValueAt(str[i],
 							tableSourceDescriptor_DetailFileDelim_RowNum, 1);
 					tableSourceDescriptor_DetailFileDelim_RowNum++;
-					
-					tableSourceDescriptor_DetailDatabase.setValueAt(
-							str[i],
+
+					tableSourceDescriptor_DetailDatabase.setValueAt(str[i],
 							tableSourceDescriptor_DetailDatabase_RowNum, 1);
 					tableSourceDescriptor_DetailDatabase_RowNum++;
 				}

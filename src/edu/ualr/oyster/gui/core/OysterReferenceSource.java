@@ -480,7 +480,7 @@ public class OysterReferenceSource {
 	/**
 	 * @param table the table to set
 	 */
-	public static void setTable(String aTable) {
+	public void setTable(String aTable) {
 		table = aTable;
 	}
 
