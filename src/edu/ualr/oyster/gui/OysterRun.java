@@ -66,6 +66,7 @@ import javax.swing.JToolBar;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
+import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -1934,39 +1935,30 @@ public class OysterRun {
 			tableSourceDescriptor_Database.setBackground(UIManager
 					.getColor("TabbedPane.light"));
 			tableSourceDescriptor_Database
-					.setSelectionBackground(Color.LIGHT_GRAY);
+					.setSelectionBackground(Color.DARK_GRAY);
 
 			tableSourceDescriptor_Database.setModel(new DefaultTableModel(
-					new Object[][] { { null, null, null, null, null, null,
-							null, null }, }, new String[] { "Source Name",
-							"Server", "Port", "SID", "Table", "Username",
-							"Password", "Connection Type" }) {
-				Class[] columnTypes = new Class[] { String.class, String.class,
-						Object.class, Object.class, Object.class, Object.class,
-						Object.class, Object.class };
-
+				new String[] {
+					"Source Name", "Server", "Port", "SID", "Table", "Username", "Password", "Connection Type"
+				},
+				tableSourceDescriptor_Database_RowNum
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, String.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+				};
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
 			});
-			tableSourceDescriptor_Database.getColumnModel().getColumn(0)
-					.setPreferredWidth(82);
-			tableSourceDescriptor_Database.getColumnModel().getColumn(0)
-					.setMaxWidth(100);
-			tableSourceDescriptor_Database.getColumnModel().getColumn(1)
-					.setPreferredWidth(90);
-			tableSourceDescriptor_Database.getColumnModel().getColumn(2)
-					.setPreferredWidth(50);
-			tableSourceDescriptor_Database.getColumnModel().getColumn(3)
-					.setPreferredWidth(65);
-			tableSourceDescriptor_Database.getColumnModel().getColumn(4)
-					.setPreferredWidth(80);
-			tableSourceDescriptor_Database.getColumnModel().getColumn(5)
-					.setPreferredWidth(77);
-			tableSourceDescriptor_Database.getColumnModel().getColumn(6)
-					.setPreferredWidth(76);
-			tableSourceDescriptor_Database.getColumnModel().getColumn(7)
-					.setPreferredWidth(95);
+			tableSourceDescriptor_Database.getColumnModel().getColumn(0).setPreferredWidth(82);
+			tableSourceDescriptor_Database.getColumnModel().getColumn(0).setMaxWidth(100);
+			tableSourceDescriptor_Database.getColumnModel().getColumn(1).setPreferredWidth(90);
+			tableSourceDescriptor_Database.getColumnModel().getColumn(2).setPreferredWidth(50);
+			tableSourceDescriptor_Database.getColumnModel().getColumn(3).setPreferredWidth(65);
+			tableSourceDescriptor_Database.getColumnModel().getColumn(4).setPreferredWidth(80);
+			tableSourceDescriptor_Database.getColumnModel().getColumn(5).setPreferredWidth(77);
+			tableSourceDescriptor_Database.getColumnModel().getColumn(6).setPreferredWidth(76);
+			tableSourceDescriptor_Database.getColumnModel().getColumn(7).setPreferredWidth(95);
 		}
 
 		return tableSourceDescriptor_Database;
@@ -2097,59 +2089,19 @@ public class OysterRun {
 		}
 	}
 
-	private String setSourceDescriptor_DatebaseConfig() {
+	private void setSourceDescriptor_DatebaseConfig() {
 		if (tableSourceDescriptor_Database_RowNum == 0) {
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getServer(),
-					tableSourceDescriptor_Database_RowNum, 0);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getPort(),
-					tableSourceDescriptor_Database_RowNum, 1);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getSID(),
-					tableSourceDescriptor_Database_RowNum, 2);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getUserID(),
-					tableSourceDescriptor_Database_RowNum, 3);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getPassword(),
-					tableSourceDescriptor_Database_RowNum, 4);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getTableName(),
-					tableSourceDescriptor_Database_RowNum, 5);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getConnectionType(),
-					tableSourceDescriptor_Database_RowNum, 6);
-			tabbedPaneSourceDescriptor_Sources.setSelectedIndex(0);
-
-			tableSourceDescriptor_Database_RowNum++;
+			
+			File file = null;
+			XMLtoDescription(file, tableSourceDescriptor_Database);
+			
 		} else {
-			tableSourceDescriptor_Database_RowNum = 0;
-
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getServer(),
-					tableSourceDescriptor_Database_RowNum, 0);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getPort(),
-					tableSourceDescriptor_Database_RowNum, 1);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getSID(),
-					tableSourceDescriptor_Database_RowNum, 2);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getUserID(),
-					tableSourceDescriptor_Database_RowNum, 3);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getPassword(),
-					tableSourceDescriptor_Database_RowNum, 4);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getTableName(),
-					tableSourceDescriptor_Database_RowNum, 5);
-			tableSourceDescriptor_Database.setValueAt(
-					dbConfigRefrenceSource.getConnectionType(),
-					tableSourceDescriptor_Database_RowNum, 6);
-			tabbedPaneSourceDescriptor_Sources.setSelectedIndex(0);
-		}
-		return null;
+			tableSourceDescriptor_Database_RowNum --;
+			
+			File file = null;
+			XMLtoDescription(file, tableSourceDescriptor_Database);
+			
+			}
 	}
 
 	private JPanel getPanelSourceDescriptor_AddTextFile() {
@@ -2325,9 +2277,7 @@ public class OysterRun {
 	private int tableSourceDescriptor_FileDelim_RowNum = 0;
 	private int tableSourceDescriptor_FileFixed_RowNum = 0;
 	private int tableSourceDescriptor_Database_RowNum = 0;
-
 	private int tableRunScript_ReferenceSources_RowNum = 0;
-
 	private int tableSourceDescriptor_DetailFileDelim_RowNum = 0;
 	private int tableSourceDescriptor_DetailFileFixed_RowNum = 0;
 	private int tableSourceDescriptor_DetailDatabase_RowNum = 0;
@@ -2373,12 +2323,9 @@ public class OysterRun {
 				if (ret == JFileChooser.APPROVE_OPTION) {
 					tabbedPaneSourceDescriptor_Sources.setEnabledAt(2, true);
 
-					tableSourceDescriptor_FileDelim.setValueAt(
-							textSourceDescriptor_AddFilePath.getText(),
-							tableSourceDescriptor_FileDelim_RowNum, 1);
-					tableSourceDescriptor_FileDelim.setValueAt(
-							"FileDelim Source",
-							tableSourceDescriptor_FileDelim_RowNum, 0);
+					XMLtoDescription(file, tableSourceDescriptor_FileDelim);
+					
+					
 					tabbedPaneSourceDescriptor_Sources.setSelectedIndex(2);
 					panelSourceDescriptor_AddTextFile.setVisible(false);
 					comboBoxSourceDescriptor_AddSourceType.setSelectedIndex(0);
@@ -2393,12 +2340,8 @@ public class OysterRun {
 				if (ret == JFileChooser.APPROVE_OPTION) {
 					tabbedPaneSourceDescriptor_Sources.setEnabledAt(1, true);
 
-					tableSourceDescriptor_FileFixed.setValueAt(
-							textSourceDescriptor_AddFilePath.getText(),
-							tableSourceDescriptor_FileFixed_RowNum, 1);
-					tableSourceDescriptor_FileFixed.setValueAt(
-							"FileFixed Source",
-							tableSourceDescriptor_FileFixed_RowNum, 0);
+					XMLtoDescription(file, tableSourceDescriptor_FileFixed);
+					
 					tabbedPaneSourceDescriptor_Sources.setSelectedIndex(1);
 					panelSourceDescriptor_AddTextFile.setVisible(false);
 					comboBoxSourceDescriptor_AddSourceType.setSelectedIndex(0);
@@ -3039,7 +2982,7 @@ public class OysterRun {
 			tableRunScript_ReferenceSources.setBackground(UIManager
 					.getColor("TabbedPane.light"));
 			tableRunScript_ReferenceSources
-					.setSelectionBackground(Color.LIGHT_GRAY);
+					.setSelectionBackground(Color.DARK_GRAY);
 			tableRunScript_ReferenceSources.setRowHeight(20);
 			tableRunScript_ReferenceSources.setModel(new DefaultTableModel(
 					new String[] { "Capture", "Source Name", "Source Type",
@@ -3084,34 +3027,25 @@ public class OysterRun {
 		if (tableSourceDescriptor_FileDelim == null) {
 			tableSourceDescriptor_FileDelim = new JTable();
 			tableSourceDescriptor_FileDelim
-					.setSelectionBackground(Color.LIGHT_GRAY);
+					.setSelectionBackground(Color.DARK_GRAY);
 			tableSourceDescriptor_FileDelim.setBackground(UIManager
 					.getColor("TabbedPane.light"));
 			tableSourceDescriptor_FileDelim.setModel(new DefaultTableModel(
-					new Object[][] { { null, null, null, null, null }, },
-					new String[] { "Source Name",
-							"Absolute Path to Delimited Text File",
-							"Delimiter", "Qualifier", "Labels" }) {
-				Class[] columnTypes = new Class[] { String.class, String.class,
-						String.class, String.class, Boolean.class };
-
+				new String[] {
+					"Source Name", "Absolute Path to Delimited Text File", "Delimiter", "Qualifier", "Labels"
+				},
+				tableSourceDescriptor_FileDelim_RowNum
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, String.class, String.class, String.class, Boolean.class
+				};
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
-
-				boolean[] columnEditables = new boolean[] { true, false, true,
-						true, true };
-
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
 			});
-			tableSourceDescriptor_FileDelim.getColumnModel().getColumn(0)
-					.setPreferredWidth(93);
-			tableSourceDescriptor_FileDelim.getColumnModel().getColumn(0)
-					.setMaxWidth(100);
-			tableSourceDescriptor_FileDelim.getColumnModel().getColumn(1)
-					.setPreferredWidth(306);
+			tableSourceDescriptor_FileDelim.getColumnModel().getColumn(0).setPreferredWidth(93);
+			tableSourceDescriptor_FileDelim.getColumnModel().getColumn(0).setMaxWidth(100);
+			tableSourceDescriptor_FileDelim.getColumnModel().getColumn(1).setPreferredWidth(306);
 			tableSourceDescriptor_FileDelim.setRowHeight(20);
 		}
 		return tableSourceDescriptor_FileDelim;
@@ -3132,33 +3066,28 @@ public class OysterRun {
 		if (tableSourceDescriptor_FileFixed == null) {
 			tableSourceDescriptor_FileFixed = new JTable();
 			tableSourceDescriptor_FileFixed
-					.setSelectionBackground(Color.LIGHT_GRAY);
+					.setSelectionBackground(Color.DARK_GRAY);
 			tableSourceDescriptor_FileFixed.setRowHeight(20);
 			tableSourceDescriptor_FileFixed.setBackground(UIManager
 					.getColor("TabbedPane.light"));
 			tableSourceDescriptor_FileFixed
-					.setModel(new DefaultTableModel(new Object[][] { { null,
-							null }, }, new String[] { "Source Name",
-							"Absolute Path to Fixed Text File" }) {
-						Class[] columnTypes = new Class[] { String.class,
-								String.class };
-
-						public Class getColumnClass(int columnIndex) {
-							return columnTypes[columnIndex];
-						}
-
-						boolean[] columnEditables = new boolean[] { true, false };
-
-						public boolean isCellEditable(int row, int column) {
-							return columnEditables[column];
-						}
-					});
-			tableSourceDescriptor_FileFixed.getColumnModel().getColumn(0)
-					.setPreferredWidth(96);
-			tableSourceDescriptor_FileFixed.getColumnModel().getColumn(0)
-					.setMaxWidth(100);
-			tableSourceDescriptor_FileFixed.getColumnModel().getColumn(1)
-					.setPreferredWidth(245);
+					.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Source Name", "Absolute Path to Fixed Text File"
+				}
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, String.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+			tableSourceDescriptor_FileFixed.getColumnModel().getColumn(0).setPreferredWidth(96);
+			tableSourceDescriptor_FileFixed.getColumnModel().getColumn(0).setMaxWidth(100);
+			tableSourceDescriptor_FileFixed.getColumnModel().getColumn(1).setPreferredWidth(245);
 		}
 		return tableSourceDescriptor_FileFixed;
 	}
@@ -3275,16 +3204,14 @@ public class OysterRun {
 			tableSourceDescriptor_DetailFileFixed
 					.setBackground(SystemColor.control);
 			tableSourceDescriptor_DetailFileFixed
-					.setSelectionBackground(SystemColor.controlHighlight);
+					.setSelectionBackground(SystemColor.DARK_GRAY);
 			tableSourceDescriptor_DetailFileFixed.setRowHeight(20);
 			tableSourceDescriptor_DetailFileFixed
-					.setModel(new DefaultTableModel(new Object[][] {
-							{ null, null, null, null },
-							{ null, null, null, null },
-							{ null, null, null, null },
-							{ null, null, null, null },
-							{ null, null, null, null }, }, new String[] {
-							"Name", "Attribute", "Start", "End" }));
+					.setModel(new DefaultTableModel(
+				new String[] {
+					"Name", "Attribute", "Start", "End"
+				}, tableSourceDescriptor_DetailFileFixed_RowNum
+			));
 		}
 		return tableSourceDescriptor_DetailFileFixed;
 	}
@@ -3305,16 +3232,16 @@ public class OysterRun {
 		if (tableSourceDescriptor_DetailFileDelim == null) {
 			tableSourceDescriptor_DetailFileDelim = new JTable();
 			tableSourceDescriptor_DetailFileDelim
-					.setSelectionBackground(SystemColor.controlHighlight);
+					.setSelectionBackground(SystemColor.DARK_GRAY);
 			tableSourceDescriptor_DetailFileDelim
 					.setBackground(SystemColor.control);
 			tableSourceDescriptor_DetailFileDelim.setRowHeight(20);
 			tableSourceDescriptor_DetailFileDelim
-					.setModel(new DefaultTableModel(new Object[][] {
-							{ null, null, null }, { null, null, null },
-							{ null, null, null }, { null, null, null },
-							{ null, null, null }, }, new String[] { "Name",
-							"Attribute", "Pos" }));
+					.setModel(new DefaultTableModel(
+				new String[] {
+					"Name", "Attribute", "Pos"
+				}, tableSourceDescriptor_DetailFileDelim_RowNum
+			));
 		}
 		return tableSourceDescriptor_DetailFileDelim;
 	}
@@ -3453,13 +3380,14 @@ public class OysterRun {
 			tableSourceDescriptor_DetailDatabase
 					.setBackground(SystemColor.control);
 			tableSourceDescriptor_DetailDatabase
-					.setSelectionBackground(SystemColor.controlHighlight);
+					.setSelectionBackground(SystemColor.DARK_GRAY);
 			tableSourceDescriptor_DetailDatabase.setRowHeight(20);
 			tableSourceDescriptor_DetailDatabase
-					.setModel(new DefaultTableModel(new Object[][] {
-							{ null, null }, { null, null }, { null, null },
-							{ null, null }, { null, null }, }, new String[] {
-							"Name", "Attribute" }));
+					.setModel(new DefaultTableModel(
+				new String[] {
+					"Name", "Attribute"
+				}, tableSourceDescriptor_DetailDatabase_RowNum
+			));
 		}
 		return tableSourceDescriptor_DetailDatabase;
 	}
@@ -3508,35 +3436,42 @@ public class OysterRun {
 		 */
 		private void SourceDescriptorTab_ResetSources() {
 
-			tableSourceDescriptor_Database.selectAll();
 
-			DefaultTableModel dmdb = (DefaultTableModel) tableSourceDescriptor_Database
-					.getModel();
-
-			for (int i = 0; i < dmdb.getColumnCount(); i++) {
-				dmdb.setValueAt(null, 0, i);
+			DefaultTableModel dftm = null;
+			
+			dftm = (DefaultTableModel) tableSourceDescriptor_Database.getModel();
+			for (int i = 0; i < dftm.getRowCount(); i++) {
+				dftm.removeRow(i);
 			}
 
-			tableSourceDescriptor_FileFixed.selectAll();
-
-			DefaultTableModel dmff = (DefaultTableModel) tableSourceDescriptor_FileFixed
-					.getModel();
-
-			for (int i = 0; i < dmff.getColumnCount(); i++) {
-				dmff.setValueAt(null, 0, i);
+			dftm = (DefaultTableModel) tableSourceDescriptor_DetailDatabase.getModel();
+			for (int i = 0; i < dftm.getRowCount(); i++) {
+				dftm.removeRow(i);
+			}
+			
+			dftm = (DefaultTableModel) tableSourceDescriptor_FileFixed.getModel();
+			for (int i = 0; i < dftm.getRowCount(); i++) {
+				dftm.removeRow(i);
 			}
 
-			tableSourceDescriptor_FileDelim.selectAll();
+			dftm = (DefaultTableModel) tableSourceDescriptor_DetailFileFixed.getModel();
+			for (int i = 0; i < dftm.getRowCount(); i++) {
+				dftm.removeRow(i);
+			}
 
-			DefaultTableModel dmfd = (DefaultTableModel) tableSourceDescriptor_FileDelim
-					.getModel();
-
-			for (int i = 0; i < dmfd.getColumnCount(); i++) {
-				dmfd.setValueAt(null, 0, i);
+			dftm = (DefaultTableModel) tableSourceDescriptor_FileDelim.getModel();
+			for (int i = 0; i < dftm.getRowCount(); i++) {
+				dftm.removeRow(i);
+			}
+			
+			dftm = (DefaultTableModel) tableSourceDescriptor_DetailFileDelim.getModel();
+			for (int i = 0; i < dftm.getRowCount(); i++) {
+				dftm.removeRow(i);
 			}
 		}
 	}
 
+	
 	private JButton getBtnSourceDescriptor_CreateSourcedescriptor() {
 		if (btnSourceDescriptor_CreateSourcedescriptor == null) {
 			btnSourceDescriptor_CreateSourcedescriptor = new JButton(
@@ -3552,6 +3487,7 @@ public class OysterRun {
 	private OysterReferenceSource oysterReferenceSource = new OysterReferenceSource();
 	private JButton btnRunScript_ReferenceSourcesRemove;
 
+	
 	private class BtnSourceDescriptor_CreateSourcedescriptorAction implements
 			ActionListener {
 
@@ -3561,6 +3497,7 @@ public class OysterRun {
 		}
 	}
 
+	
 	private void createSourceDescriptor() {
 		saveSourceDescriptor();
 		// clear the Stringbuffer content
@@ -3640,6 +3577,7 @@ public class OysterRun {
 				OysterSourceDescriptorXml.toString());
 	}
 
+	
 	private void saveSourceDescriptor() {
 		/*
 		 * Comments
@@ -3654,7 +3592,7 @@ public class OysterRun {
 				.getText());
 
 		if (tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 0) {
-			oysterReferenceSource.setSourceType("Databse");
+			oysterReferenceSource.setSourceType("Database");
 			oysterReferenceSource
 					.setSourceName((String) tableSourceDescriptor_Database
 							.getValueAt(0, 0));
@@ -3717,26 +3655,29 @@ public class OysterRun {
 		}
 	}
 
+	
 	private JButton getBtnSourceDescriptor_RefreshDb() {
 		if (btnSourceDescriptor_RefreshDb == null) {
-			btnSourceDescriptor_RefreshDb = new JButton(
-					"Refresh Database Config");
+			btnSourceDescriptor_RefreshDb = new JButton("Refresh Database Config");
 			btnSourceDescriptor_RefreshDb.setVisible(false);
 			btnSourceDescriptor_RefreshDb.setBounds(575, 234, 153, 36);
-			btnSourceDescriptor_RefreshDb
-					.setHorizontalTextPosition(SwingConstants.CENTER);
+			btnSourceDescriptor_RefreshDb.setHorizontalTextPosition(SwingConstants.CENTER);
+			btnSourceDescriptor_RefreshDb.setBorder( new MatteBorder(2,2,2,2, Color.GREEN) );
 			btnSourceDescriptor_RefreshDb
 					.addActionListener(new BtnRefreshAction());
 		}
 		return btnSourceDescriptor_RefreshDb;
 	}
 
+	
 	private class BtnRefreshAction implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			setSourceDescriptor_DatebaseConfig();
+			btnSourceDescriptor_RefreshDb.setVisible(false);
 		}
 	}
 
+	
 	private JButton getBtnSourceDescriptor_LoadAttributesFile() {
 		if (btnSourceDescriptor_LoadAttributesFile == null) {
 			btnSourceDescriptor_LoadAttributesFile = new JButton(
@@ -3748,6 +3689,7 @@ public class OysterRun {
 		return btnSourceDescriptor_LoadAttributesFile;
 	}
 
+	
 	private class BtnSourceDescriptor_LoadAttributesFileAction implements
 			ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
@@ -3774,26 +3716,22 @@ public class OysterRun {
 				Enumeration<OysterAttribute> Attributes;
 				Attributes = attrComp.keys();
 				int i = 0;
-				String[] str = { "" };
+				String[] str = new String[attrComp.size()];
 				while (Attributes.hasMoreElements()) {
 					str[i] = Attributes.nextElement().getName();
-					// System.out.println(str[i]);
-					tableSourceDescriptor_DetailFileFixed.setValueAt(str[i],
-							tableSourceDescriptor_DetailFileFixed_RowNum, 1);
-					tableSourceDescriptor_DetailFileFixed_RowNum++;
-
-					tableSourceDescriptor_DetailFileDelim.setValueAt(str[i],
-							tableSourceDescriptor_DetailFileDelim_RowNum, 1);
-					tableSourceDescriptor_DetailFileDelim_RowNum++;
-
-					tableSourceDescriptor_DetailDatabase.setValueAt(str[i],
-							tableSourceDescriptor_DetailDatabase_RowNum, 1);
-					tableSourceDescriptor_DetailDatabase_RowNum++;
-				}
+					i ++;
+				}	
+					FillDetailTables(str, tableSourceDescriptor_DetailDatabase, tableSourceDescriptor_DetailDatabase_RowNum);
+					tableSourceDescriptor_DetailDatabase_RowNum = tableSourceDescriptor_DetailDatabase.getRowCount();
+					FillDetailTables(str, tableSourceDescriptor_DetailFileDelim, tableSourceDescriptor_DetailFileDelim_RowNum);
+					tableSourceDescriptor_DetailFileDelim_RowNum = tableSourceDescriptor_DetailFileDelim.getRowCount();
+					FillDetailTables(str, tableSourceDescriptor_DetailFileFixed, tableSourceDescriptor_DetailFileFixed_RowNum);
+					tableSourceDescriptor_DetailFileFixed_RowNum = tableSourceDescriptor_DetailFileFixed.getRowCount();				
 			}
 		}
 	}
 
+	
 	private JButton getBtnRunScript_ReferenceSourcesRemove() {
 		if (btnRunScript_ReferenceSourcesRemove == null) {
 			btnRunScript_ReferenceSourcesRemove = new JButton(
@@ -3802,10 +3740,8 @@ public class OysterRun {
 					.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
 
-							DefaultTableModel tm = (DefaultTableModel) tableRunScript_ReferenceSources
-									.getModel();
-							tm.removeRow(tableRunScript_ReferenceSources
-									.getSelectedRow());
+							DefaultTableModel tm = (DefaultTableModel) tableRunScript_ReferenceSources.getModel();
+							tm.removeRow(tableRunScript_ReferenceSources.getSelectedRow());
 							tableRunScript_ReferenceSources_RowNum--;
 						}
 					});
@@ -3814,16 +3750,10 @@ public class OysterRun {
 		return btnRunScript_ReferenceSourcesRemove;
 	}
 
-	/*
-	 * TODO: Automatically populate the XML file information into the table
-	 */
+	private void XMLtoDescription(File file, JTable table) {
 
-	public void XMLtoDescription(File file, JTable table) {
-
-		// Parse XML file
-		OysterReferenceSource ors = OysterSourceDescriptorParser.parse(file);
-
-		// Put data into the row
+				
+		DefaultTableModel tm = (DefaultTableModel) table.getModel();
 
 		if (table == tableSourceDescriptor_Database) {
 
@@ -3836,42 +3766,47 @@ public class OysterRun {
 					dbConfigRefrenceSource.getPassword(),
 					dbConfigRefrenceSource.getConnectionType() };
 
-			for (int i = 0; i < table.getColumnCount(); i++) {
-				tableSourceDescriptor_Database.getModel().setValueAt(
-						insertion[i], tableSourceDescriptor_Database_RowNum, i);
-			}
-
+			tm.insertRow(tableSourceDescriptor_Database_RowNum, insertion);
+			
 			tableSourceDescriptor_Database_RowNum++;
 
 		} else if (table == tableSourceDescriptor_FileDelim) {
-			tableSourceDescriptor_FileDelim.setValueAt(file.getPath(),
-					tableSourceDescriptor_FileDelim_RowNum, 1);
 
+			Object[] insertion = { "File Delim. Source", file.getAbsolutePath(), };
+			tm.insertRow(tableSourceDescriptor_FileDelim_RowNum, insertion);
+			
 			tableSourceDescriptor_DetailFileDelim_RowNum++;
 
 		} else if (table == tableSourceDescriptor_FileFixed) {
-			tableSourceDescriptor_FileFixed.setValueAt(file.getPath(),
-					tableSourceDescriptor_FileFixed_RowNum, 1);
 
-			Object[] insertion = { ors.getSourceName(), ors.getSourcePath() };
-
-			for (int i = 0; i < table.getColumnCount(); i++) {
-				tableSourceDescriptor_DetailFileFixed.getModel().setValueAt(
-						insertion[i],
-						tableSourceDescriptor_DetailFileFixed_RowNum, i);
-			}
+			Object[] insertion = { "File Fixed Source", file.getAbsolutePath() };
+			tm.insertRow(tableSourceDescriptor_FileFixed_RowNum, insertion);
 
 			tableSourceDescriptor_DetailFileFixed_RowNum++;
+			
 		} else if (table == tableRunScript_ReferenceSources) {
 
-			Object[] insertion = { false, ors.getSourceName(),
-					ors.getSourceType(), ors.getSourcePath() };
-
-			DefaultTableModel tm = (DefaultTableModel) table.getModel();
+			OysterReferenceSource ors = OysterSourceDescriptorParser.parse(file);
+			
+			Object[] insertion = { false, ors.getSourceName(),ors.getSourceType(), ors.getSourcePath() };
 			tm.insertRow(tableRunScript_ReferenceSources_RowNum, insertion);
 
 			tableRunScript_ReferenceSources_RowNum++;
 		}
 
 	}
+
+	private void FillDetailTables(String[] str, JTable table, int RowNum)
+	{
+		DefaultTableModel tm = (DefaultTableModel)table.getModel();
+	
+		for(int i = RowNum; i < str.length; i++){
+			
+			Object [] insertion = { null, str[i] };
+			tm.insertRow(RowNum, insertion);
+			RowNum ++;
+			
+		}
+	}
+		
 }
