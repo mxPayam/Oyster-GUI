@@ -269,6 +269,7 @@ public class OysterDbConnectionFrame extends JFrame {
 					.setPasswdord(passwordPassword.getText());
 			edu.ualr.oyster.gui.OysterRun.dbConfigRefrenceSource
 					.setTableName(textTable.getText());
+			
 		}
 
 		return tag;

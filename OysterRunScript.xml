@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document: OysterRunScript.xml
+    Created on: Mon Jul 11 10:25:37 CDT 2011
+    Author: Payam Mahmoudian
+    Description: 
+-->
+<OysterRunScript>
+    <Settings Explanation="Off" Debug="Off"</Settings>
+
+    <LogFile Num="1" Size="100000000"> Absolute Path to Log Directory\Run_%g.log</LogFile>
+
+    <EREngine Type="RSwooshStandard"</EREngine>
+
+    <!-- Attributes read from file only -->
+    <AttributePath>C:\Users\iThink\Documents\Run001\OysterAttributes.xml</AttributePath>
+
+    <!-- Identity Input Selection -->
+    <IdentityInput Type="None"></IdentityInput>
+
+    <!-- Identity Output Selection (Only needed when CaptureMode=On) -->
+    <IdentityOutput Type="None"></IdentityOutput>
+
+    <!-- Link Output Selection (Only needed when CaptureMode=On) -->
+    <LinkOutput Type="TextFile"> Absolute Path to LinkOutput Directory \LinkOutput.link</LinkOutput>
+
+    <!-- Sources to Run -->
+    <ReferenceSources>
+        <Source Capture="null">null</Source>
+    </ReferenceSources>
+</OysterRunScript>

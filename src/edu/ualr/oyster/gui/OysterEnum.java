@@ -128,7 +128,7 @@ public class OysterEnum {
 		 * may have up to five additional attributes: Type, Server, Port, SID,
 		 * UserID, Passwd
 		 */
-		Database
+//		Database
 	}
 
 	public static enum IdentityOutputType {
