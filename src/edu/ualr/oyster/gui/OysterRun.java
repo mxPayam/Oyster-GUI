@@ -2324,12 +2324,10 @@ public class OysterRun {
 					tabbedPaneSourceDescriptor_Sources.setEnabledAt(2, true);
 
 					XMLtoDescription(file, tableSourceDescriptor_FileDelim);
-					
-					
+						
 					tabbedPaneSourceDescriptor_Sources.setSelectedIndex(2);
 					panelSourceDescriptor_AddTextFile.setVisible(false);
 					comboBoxSourceDescriptor_AddSourceType.setSelectedIndex(0);
-					tableSourceDescriptor_FileDelim_RowNum = 0;
 					comboBoxSourceDescriptor_AddSourceType.setEnabled(false);
 					btnSourceDescriptor_DeleteSourceName.setEnabled(true);
 
@@ -2345,7 +2343,6 @@ public class OysterRun {
 					tabbedPaneSourceDescriptor_Sources.setSelectedIndex(1);
 					panelSourceDescriptor_AddTextFile.setVisible(false);
 					comboBoxSourceDescriptor_AddSourceType.setSelectedIndex(0);
-					tableSourceDescriptor_FileFixed_RowNum = 0;
 					comboBoxSourceDescriptor_AddSourceType.setEnabled(false);
 					btnSourceDescriptor_DeleteSourceName.setEnabled(true);
 
@@ -3436,42 +3433,28 @@ public class OysterRun {
 		 */
 		private void SourceDescriptorTab_ResetSources() {
 
-
-			DefaultTableModel dftm = null;
 			
-			dftm = (DefaultTableModel) tableSourceDescriptor_Database.getModel();
-			for (int i = 0; i < dftm.getRowCount(); i++) {
-				dftm.removeRow(i);
-			}
+			ClearTable(tableSourceDescriptor_Database);
+			tableSourceDescriptor_Database_RowNum = 0;
 
-			dftm = (DefaultTableModel) tableSourceDescriptor_DetailDatabase.getModel();
-			for (int i = 0; i < dftm.getRowCount(); i++) {
-				dftm.removeRow(i);
-			}
-			
-			dftm = (DefaultTableModel) tableSourceDescriptor_FileFixed.getModel();
-			for (int i = 0; i < dftm.getRowCount(); i++) {
-				dftm.removeRow(i);
-			}
+			ClearTable(tableSourceDescriptor_DetailDatabase);
+			tableSourceDescriptor_DetailDatabase_RowNum = 0;
+		
+			ClearTable(tableSourceDescriptor_FileFixed);
+			tableSourceDescriptor_FileFixed_RowNum = 0;
+	
+			ClearTable(tableSourceDescriptor_DetailFileFixed);
+			tableSourceDescriptor_DetailFileFixed_RowNum = 0;
 
-			dftm = (DefaultTableModel) tableSourceDescriptor_DetailFileFixed.getModel();
-			for (int i = 0; i < dftm.getRowCount(); i++) {
-				dftm.removeRow(i);
-			}
-
-			dftm = (DefaultTableModel) tableSourceDescriptor_FileDelim.getModel();
-			for (int i = 0; i < dftm.getRowCount(); i++) {
-				dftm.removeRow(i);
-			}
-			
-			dftm = (DefaultTableModel) tableSourceDescriptor_DetailFileDelim.getModel();
-			for (int i = 0; i < dftm.getRowCount(); i++) {
-				dftm.removeRow(i);
-			}
+			ClearTable(tableSourceDescriptor_FileDelim);
+			tableSourceDescriptor_FileDelim_RowNum = 0;
+					
+			ClearTable(tableSourceDescriptor_DetailFileDelim);	
+			tableSourceDescriptor_DetailFileDelim_RowNum = 0;
+		
 		}
 	}
 
-	
 	private JButton getBtnSourceDescriptor_CreateSourcedescriptor() {
 		if (btnSourceDescriptor_CreateSourcedescriptor == null) {
 			btnSourceDescriptor_CreateSourcedescriptor = new JButton(
@@ -3485,8 +3468,8 @@ public class OysterRun {
 	}
 
 	private OysterReferenceSource oysterReferenceSource = new OysterReferenceSource();
+	
 	private JButton btnRunScript_ReferenceSourcesRemove;
-
 	
 	private class BtnSourceDescriptor_CreateSourcedescriptorAction implements
 			ActionListener {
@@ -3497,7 +3480,6 @@ public class OysterRun {
 		}
 	}
 
-	
 	private void createSourceDescriptor() {
 		saveSourceDescriptor();
 		// clear the Stringbuffer content
@@ -3566,8 +3548,8 @@ public class OysterRun {
 		OysterSourceDescriptorXml.append("<ReferenceItems>");
 		OysterSourceDescriptorXml.append("\n");
 		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("<Item Name=" + oysterReferenceSource.getSourceName() + "");
+		
 		OysterSourceDescriptorXml.append("    ");
 		OysterSourceDescriptorXml.append("</ReferenceItems>");
 		OysterSourceDescriptorXml.append("\n");
@@ -3577,7 +3559,6 @@ public class OysterRun {
 				OysterSourceDescriptorXml.toString());
 	}
 
-	
 	private void saveSourceDescriptor() {
 		/*
 		 * Comments
@@ -3655,7 +3636,6 @@ public class OysterRun {
 		}
 	}
 
-	
 	private JButton getBtnSourceDescriptor_RefreshDb() {
 		if (btnSourceDescriptor_RefreshDb == null) {
 			btnSourceDescriptor_RefreshDb = new JButton("Refresh Database Config");
@@ -3669,7 +3649,6 @@ public class OysterRun {
 		return btnSourceDescriptor_RefreshDb;
 	}
 
-	
 	private class BtnRefreshAction implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			setSourceDescriptor_DatebaseConfig();
@@ -3677,7 +3656,6 @@ public class OysterRun {
 		}
 	}
 
-	
 	private JButton getBtnSourceDescriptor_LoadAttributesFile() {
 		if (btnSourceDescriptor_LoadAttributesFile == null) {
 			btnSourceDescriptor_LoadAttributesFile = new JButton(
@@ -3689,7 +3667,6 @@ public class OysterRun {
 		return btnSourceDescriptor_LoadAttributesFile;
 	}
 
-	
 	private class BtnSourceDescriptor_LoadAttributesFileAction implements
 			ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
@@ -3708,7 +3685,7 @@ public class OysterRun {
 				treeViewer.createUI(file);
 
 				attributes = OysterAttributesParser.parse(file);
-
+				
 				Hashtable<OysterAttribute, OysterComparator> attrComp = attributes
 						.getAttrComp();
 				// Show all Attribute in the hash table.
@@ -3721,17 +3698,20 @@ public class OysterRun {
 					str[i] = Attributes.nextElement().getName();
 					i ++;
 				}	
+				
+				
 					FillDetailTables(str, tableSourceDescriptor_DetailDatabase, tableSourceDescriptor_DetailDatabase_RowNum);
 					tableSourceDescriptor_DetailDatabase_RowNum = tableSourceDescriptor_DetailDatabase.getRowCount();
 					FillDetailTables(str, tableSourceDescriptor_DetailFileDelim, tableSourceDescriptor_DetailFileDelim_RowNum);
 					tableSourceDescriptor_DetailFileDelim_RowNum = tableSourceDescriptor_DetailFileDelim.getRowCount();
 					FillDetailTables(str, tableSourceDescriptor_DetailFileFixed, tableSourceDescriptor_DetailFileFixed_RowNum);
-					tableSourceDescriptor_DetailFileFixed_RowNum = tableSourceDescriptor_DetailFileFixed.getRowCount();				
+					tableSourceDescriptor_DetailFileFixed_RowNum = tableSourceDescriptor_DetailFileFixed.getRowCount();		
+					
+					btnSourceDescriptor_DeleteSourceName.setEnabled(true);
 			}
 		}
 	}
 
-	
 	private JButton getBtnRunScript_ReferenceSourcesRemove() {
 		if (btnRunScript_ReferenceSourcesRemove == null) {
 			btnRunScript_ReferenceSourcesRemove = new JButton(
@@ -3775,14 +3755,14 @@ public class OysterRun {
 			Object[] insertion = { "File Delim. Source", file.getAbsolutePath(), };
 			tm.insertRow(tableSourceDescriptor_FileDelim_RowNum, insertion);
 			
-			tableSourceDescriptor_DetailFileDelim_RowNum++;
+			tableSourceDescriptor_FileDelim_RowNum++;
 
 		} else if (table == tableSourceDescriptor_FileFixed) {
 
 			Object[] insertion = { "File Fixed Source", file.getAbsolutePath() };
 			tm.insertRow(tableSourceDescriptor_FileFixed_RowNum, insertion);
 
-			tableSourceDescriptor_DetailFileFixed_RowNum++;
+			tableSourceDescriptor_FileFixed_RowNum++;
 			
 		} else if (table == tableRunScript_ReferenceSources) {
 
@@ -3799,14 +3779,31 @@ public class OysterRun {
 	private void FillDetailTables(String[] str, JTable table, int RowNum)
 	{
 		DefaultTableModel tm = (DefaultTableModel)table.getModel();
-	
-		for(int i = RowNum; i < str.length; i++){
-			
+
+		for(int i = 0; i < str.length; i++){
+
 			Object [] insertion = { null, str[i] };
 			tm.insertRow(RowNum, insertion);
 			RowNum ++;
-			
+
 		}
 	}
 		
+	private void ClearTable(JTable table){
+		DefaultTableModel dftm = (DefaultTableModel) table.getModel();
+		
+		while (dftm.getRowCount() > 0) {
+			System.out.println( dftm.getRowCount() );
+			dftm.removeRow(0);
+			
+		}
+	}
+
+	private String GetFormedReferenceItems()
+	{
+		
+		
+		
+		return "";
+	}
 }
