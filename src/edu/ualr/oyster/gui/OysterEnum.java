@@ -50,7 +50,7 @@ public class OysterEnum {
 
 	public static enum ConnectionType {
 
-		ODBC, MySQL, PostgreSQL, Oracle, MSSQL
+		ODBC, MySQL, PostgreSQL, Oracle, MSSQL, MSAccess
 	}
 
 	/**

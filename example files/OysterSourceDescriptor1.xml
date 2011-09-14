@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : OysterSourceDescriptorq.xml
+    Created on : February 6, 2010, 9:06 AM
+    Author     : Eric D. Nelson
+    Description: Source Descriptor for RunA
+-->
+
+<OysterSourceDescriptor Name="source2">
+    <!-- Types of Sources (Only one can be defined) -->
+    <!-- Delimited -->
+    <Source Type="FileDelim" Char="|" Qual="" Labels="Y">Z:\Oyster\Run004\Input\Test_Data_1.txt</Source>
+    
+    <!-- Items in Source (One for each item in the source including reference identifier -->
+    <ReferenceItems>
+        <!-- For Delimited -->
+        <Item Name="IdentityID" Attribute="@RefID" Pos="0"/>
+        <Item Name="Fname" Attribute="StudentFirstName" Pos="1"/>
+        <Item Name="Lname" Attribute="StudentLastName" Pos="2"/>
+        <Item Name="LEA4" Attribute="LEA" Pos="3"/>
+        <Item Name="SSN" Attribute="SocialSecurityNbr" Pos="4"/>
+        <Item Name="DOBYMD" Attribute="StudentDateOfBirth" Pos="5"/>
+    </ReferenceItems>
+
+</OysterSourceDescriptor>

@@ -476,7 +476,14 @@ public class OysterReferenceSource {
 	public void addOysterReferenceItem(OysterReferenceItem item) {
 		referenceItems.add(item);
 	}
-
+	
+	/**
+	 * Clear the ArrayList of referenceItems 
+	 */
+	public void clearOysterReferenceItem() {
+		referenceItems.clear();
+	}
+	
 	/**
 	 * @param table the table to set
 	 */
@@ -487,7 +494,7 @@ public class OysterReferenceSource {
 	/**
 	 * @return the table
 	 */
-	public static String getTable() {
+	public String getTable() {
 		return table;
 	}
 }

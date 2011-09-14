@@ -24,18 +24,23 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import edu.ualr.oyster.gui.OysterEnum.ConnectionType;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /**
  * OysterDbConnectionFrame.java
@@ -84,6 +89,7 @@ public class OysterDbConnectionFrame extends JFrame {
 	 * Create the frame.
 	 */
 
+	private static JFrame DBFrame;
 	private static JPanel contentPane;
 
 	private static JTextField textServer;
@@ -92,7 +98,7 @@ public class OysterDbConnectionFrame extends JFrame {
 	private static JTextField textUsername;
 	private static JTextField textPort;
 	private static JTextField passwordPassword;
-
+	private static JComboBox comboBox;
 	private static String tag;
 	private String flag = "";
 
@@ -102,19 +108,22 @@ public class OysterDbConnectionFrame extends JFrame {
 	public OysterDbConnectionFrame(String tagsource) {
 
 		super();
+		
 		tag = tagsource;
 		setResizable(false);
 		setTitle(tag + " DB Config");
 		setBounds(100, 100, 274, 402);
 		contentPane = new JPanel();
 
+		this.setAlwaysOnTop(true);
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		int middleX = 800;
-		int middleY = 800;
-
+		int middleX = 1920;
+		int middleY = 1080;
+		
 		Dimension d = contentPane.getPreferredSize();
 		contentPane.setLocation(middleX - (d.width / 2), middleY
 				- (d.height / 2)); // if you have your own middle point use this
@@ -126,17 +135,43 @@ public class OysterDbConnectionFrame extends JFrame {
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_DatabaseType.setLayout(null);
 
-		JComboBox comboBox = new JComboBox();
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		
+		comboBox = new JComboBox();
+		comboBox.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				if( comboBox.getSelectedItem().toString() == "MSAccess" )
+				{
+					textServer.setEnabled(false);
+					textPort.setEnabled(false);
+				}
+				else
+				{
+					textServer.setEnabled(true);
+					textPort.setEnabled(true);
+				}
+			}
+		});
 		comboBox.setModel(new DefaultComboBoxModel(ConnectionType.values()));
-
 		comboBox.setBounds(12, 27, 206, 20);
+		
+		
 		panel_DatabaseType.add(comboBox);
 
 		btnOK = new JButton("OK");
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				boolean error = CheckDBValues();
+
+				if (!error){
 				flag = setDatabaseConfiguration();
-				OysterDbConnectionFrame.this.setVisible(false);
+				OysterDbConnectionFrame.this.dispose();
+				edu.ualr.oyster.gui.OysterRun.btnSourceDescriptor_RefreshDb.doClick();
+				}
+				
+				
 			}
 		});
 		btnOK.setBounds(50, 336, 94, 25);
@@ -144,6 +179,7 @@ public class OysterDbConnectionFrame extends JFrame {
 		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				edu.ualr.oyster.gui.OysterRun.comboBoxSourceDescriptor_AddSourceType.setEnabled(true);
 				OysterDbConnectionFrame.this.dispose();
 			}
 		});
@@ -225,6 +261,31 @@ public class OysterDbConnectionFrame extends JFrame {
 		contentPane.add(panel_DatabaseType);
 		contentPane.add(btnOK);
 		contentPane.add(btnCancel);
+
+		
+	}
+
+	private boolean CheckDBValues() {
+		boolean error = false;
+		
+		if (comboBox.getSelectedIndex() < 5){
+			if (textServer.getText().trim().equals("") || textServer.getText() == null){
+				JOptionPane.showMessageDialog(contentPane, "Please enter a server address!", "Error!", 0);
+				error = true;
+			}else 
+				if (textPort.getText().trim().equals("") || textPort.getText() == null){
+					JOptionPane.showMessageDialog(contentPane, "Please enter a server port number!", "Error!", 0);
+					error = true;
+			}else
+				if (textTable.getText().trim().equals("") || textTable.getText() == null){
+					JOptionPane.showMessageDialog(contentPane, "Please enter a database table name!", "Error!", 0);
+					error = true;
+			}
+			
+		}
+		
+		
+		return error;
 	}
 
 	public void showDatabaseFrame(String tag) {
@@ -269,7 +330,7 @@ public class OysterDbConnectionFrame extends JFrame {
 					.setPasswdord(passwordPassword.getText());
 			edu.ualr.oyster.gui.OysterRun.dbConfigRefrenceSource
 					.setTableName(textTable.getText());
-			
+			edu.ualr.oyster.gui.OysterRun.dbConfigRefrenceSource.setConnectionType( comboBox.getSelectedItem().toString() );
 		}
 
 		return tag;

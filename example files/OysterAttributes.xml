@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : OysterAttributes.xml
+    Created on : February 6, 2010, 9:03 AM
+    Author     : Eric D. Nelson
+    Description:
+        Purpose of the document follows.
+-->
+
+<OysterAttributes System="ADE">
+    <Attribute Item="StudentFirstName" Algo="edu.ualr.oyster.association.matching.OysterCompareADEFirstName" />
+    <Attribute Item="StudentLastName" Algo="edu.ualr.oyster.association.matching.OysterComparator" />
+    <Attribute Item="LEA" Algo="edu.ualr.oyster.association.matching.OysterComparator" />
+    <Attribute Item="SocialSecurityNbr" Algo="edu.ualr.oyster.association.matching.OysterCompareADESSN" />
+    <Attribute Item="StudentDateOfBirth" Algo="edu.ualr.oyster.association.matching.OysterComparator" />
+     <!-- -->
+    <IdentityRules>
+        <Rule Ident="1">
+            <Term Item="StudentFirstName" MatchResult="Exact"/>
+            <Term Item="StudentLastName" MatchResult="Exact"/>
+            <Term Item="SocialSecurityNbr" MatchResult="Exact"/>
+        </Rule>
+        <Rule Ident="2">
+            <Term Item="StudentFirstName" MatchResult="Exact"/>
+            <Term Item="StudentLastName" MatchResult="Exact"/>
+            <Term Item="SocialSecurityNbr" MatchResult="Transpose"/>
+        </Rule>
+        <Rule Ident="3">
+            <Term Item="StudentFirstName" MatchResult="Initial"/>
+            <Term Item="StudentLastName" MatchResult="Exact"/>
+            <Term Item="SocialSecurityNbr" MatchResult="Exact"/>
+        </Rule>
+        <Rule Ident="4">
+            <Term Item="StudentFirstName" MatchResult="Initial"/>
+            <Term Item="StudentLastName" MatchResult="Exact"/>
+            <Term Item="SocialSecurityNbr" MatchResult="Transpose"/>
+        </Rule>
+        <Rule Ident="5">
+            <Term Item="StudentFirstName" MatchResult="NICKNAME"/>
+            <Term Item="StudentLastName" MatchResult="Exact"/>
+            <Term Item="SocialSecurityNbr" MatchResult="Exact"/>
+        </Rule>
+        <Rule Ident="6">
+            <Term Item="StudentFirstName" MatchResult="NICKNAME"/>
+            <Term Item="StudentLastName" MatchResult="Exact"/>
+            <Term Item="SocialSecurityNbr" MatchResult="Transpose"/>
+        </Rule>
+        <Rule Ident="7">
+            <Term Item="StudentFirstName" MatchResult="Exact"/>
+            <Term Item="StudentLastName" MatchResult="Exact"/>
+            <Term Item="SocialSecurityNbr" MatchResult="Missing"/>
+            <Term Item="LEA" MatchResult="Exact"/>
+        </Rule>
+        <Rule Ident="8">
+            <Term Item="StudentFirstName" MatchResult="Initial"/>
+            <Term Item="StudentLastName" MatchResult="Exact"/>
+            <Term Item="SocialSecurityNbr" MatchResult="Missing"/>
+            <Term Item="LEA" MatchResult="Exact"/>
+        </Rule>
+        <Rule Ident="9">
+            <Term Item="SocialSecurityNbr" MatchResult="Exact"/>
+            <Term Item="StudentDateOfBirth" MatchResult="Exact"/>
+        </Rule>
+    </IdentityRules>
+</OysterAttributes>

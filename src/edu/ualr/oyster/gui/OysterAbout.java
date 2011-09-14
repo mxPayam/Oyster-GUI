@@ -96,9 +96,9 @@ public class OysterAbout extends JDialog {
 			txtrCopyright.setEditable(false);
 			txtrCopyright.setBackground(SystemColor.menu);
 			txtrCopyright.setFont(new Font("Arial", Font.BOLD, 12));
-			txtrCopyright.setText("Oyster GUI Scriptor\r\n\r\nVersion: 0.3.1\r\nBuild id: 20110924-0227\r\n\r\n(c) Copyright 2011 John Talburt, Eric Nelson, Payam Mahmoudian\r\n\r\nThis Software is part of Oyster created in the \r\nERIQ Research Center at University of Arkansas at Little Rock");
+			txtrCopyright.setText("Oyster GUI Scriptor\r\n\r\nVersion: 1.0.0\r\nBuild id: 20111309-1913\r\n\r\n(c) Copyright 2011 John Talburt, Eric Nelson\r\n      Authors: Payam Mahmoudian, Nathan Gray\r\n\r\nThis Software is part of Oyster created in the \r\nERIQ Research Center at University of Arkansas at Little Rock");
 			txtrCopyright.setRows(20);
-			txtrCopyright.setBounds(311, 11, 380, 145);
+			txtrCopyright.setBounds(311, 11, 380, 156);
 		}
 		return txtrCopyright;
 	}
@@ -110,7 +110,7 @@ public class OysterAbout extends JDialog {
 			txtrThisLibraryIs.setFont(new Font("Calibri", Font.PLAIN, 12));
 			txtrThisLibraryIs.setText("Oyster is free software; you can redistribute it and/or\r\nmodify it under the terms of the GNU Lesser General Public\r\nLicense as published by the Free Software Foundation; either\r\nversion 3 of the License, or (at your option) any later version.\r\n\r\nOyster is distributed in the hope that it will be useful,\r\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\r\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  \r\nSee the GNU Lesser General Public License for more details.\r\n\r\nYou can receive a copy of the GNU Lesser General Public License from\r\nhttp://www.gnu.org/licenses/lgpl.html\r\n");
 			txtrThisLibraryIs.setRows(20);
-			txtrThisLibraryIs.setBounds(311, 167, 380, 211);
+			txtrThisLibraryIs.setBounds(311, 178, 380, 211);
 		}
 		return txtrThisLibraryIs;
 	}

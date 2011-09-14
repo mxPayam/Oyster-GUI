@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document: OysterSourceDescriptor.xml
+    Created on: 
+    Author: Payam Mahmoudian
+    Description: 
+-->
+<OysterSourceDescriptor>
+    <!-- Types of Sources (Only one can be defined) -->
+    <Source Type="FileFixed">C:\Users\Pam\Documents\psuedo.txt</Source>
+
+    <!-- Items in Source (One for each item in the source including reference identifier) -->
+    <ReferenceItems>
+        <Item Name="a" Attribute="StudentDateOfBirth" Start="1" End="2"/>
+        <Item Name="b" Attribute="StudentFirstName" Start="9" End="10"/>
+        <Item Name="v" Attribute="SocialSecurityNbr" Start="7" End="8"/>
+        <Item Name="c" Attribute="StudentLastName" Start="5" End="6"/>
+        <Item Name="x" Attribute="LEA" Start="3" End="4"/>
+    </ReferenceItems>
+</OysterSourceDescriptor>
