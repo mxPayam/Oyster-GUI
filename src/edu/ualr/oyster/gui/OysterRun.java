@@ -87,6 +87,8 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicTreeUI.SelectionModelPropertyChangeHandler;
@@ -127,12 +129,9 @@ import java.awt.Insets;
 import javax.swing.JTree;
 import javax.swing.BoxLayout;
 import java.awt.GridLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.factories.FormFactory;
-import com.jgoodies.forms.layout.RowSpec;
-import net.miginfocom.swing.MigLayout;
 import java.awt.FlowLayout;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * OysterRun.java
@@ -141,11 +140,14 @@ import java.awt.FlowLayout;
  */
 public class OysterRun {
 
+/*
+ * Variable Declarations
+ */
 	private JFrame frm_OysterGUIScriptor;
 	private JTabbedPane tabbedPane_Oyster;
 
-	/**
-	 * Define OysterAttributes Fields
+	/*
+	 * OysterAttributes Fields
 	 */
 	private JPanel panel_OysterAttributes;
 	private JPanel panelAttributes_Comment;
@@ -157,9 +159,12 @@ public class OysterRun {
 	private JLabel labelAttributes_CreatedOn;
 	private JLabel labelAttributes_Document;
 	private JTextArea textAreaAttributes_Description;
-
-	/**
-	 * Define OysterSourceDescriptor Fields
+	private JTextField textField;
+	private JTable table_1;
+	private JPanel panel_1;
+	
+	/*
+	 * OysterSourceDescriptor Fields
 	 */
 	private JPanel panel_OysterSourceDescriptor;
 	private JPanel panelSourceDescriptor_Comment;
@@ -173,9 +178,46 @@ public class OysterRun {
 	private JTextArea textAreaSourceDescriptor_Description;
 	private JButton btnRemoveDetail;
 	private JLabel lblSourceDescriptor_Attributes;
+	private JPanel panelSourceDescriptor_AddSource;
+	public static JComboBox comboBoxSourceDescriptor_AddSourceType;
+	private JPanel panelSourceDescriptor_Sources;
+	private JTabbedPane tabbedPaneSourceDescriptor_Sources;
+	private JScrollPane scrollPaneSourceDescriptor_Database;
+	private JTable tableSourceDescriptor_Database;
+	private JScrollPane scrollPaneSourceDescriptor_FileDelim;
+	private JTable tableSourceDescriptor_FileDelim;
+	private JScrollPane scrollPaneSourceDescriptor_FileFixed;
+	private JTable tableSourceDescriptor_FileFixed;
+	private JPanel panelSourceDescriptor_AddTextFile;
+	private JPanel panelSourceDescriptor_DeleteSource;
+	private JButton btnSourceDescriptor_AddFileSelect;
+	private JTextField textSourceDescriptor_AddFilePath;
+	private JScrollPane scrollPaneSourceDescriptor_DetailDatabase;
+	private JTable tableSourceDescriptor_DetailDatabase;
+	private JLabel labelSourceDescriptor_SourceName;
+	private JButton btnSourceDescriptor_DeleteSourceName;
+	private JLabel lblSourceType;
+	private JButton btnSourceDescriptor_CreateSourcedescriptor;
+	public static JButton btnSourceDescriptor_RefreshDb;
+	private JButton btnSourceDescriptor_LoadAttributesFile;
+	private JPanel panelSourceDescriptor_SourcesDetail;
+	private JScrollPane scrollPaneSourceDescriptor_DetailFileFixed;
+	private JTable tableSourceDescriptor_DetailFileFixed;
+	private JScrollPane scrollPaneSourceDescriptor_DetailFileDelim;
+	private JTable tableSourceDescriptor_DetailFileDelim;
 	
-	/**
-	 * Define OysterRunScript Fields
+	/*
+	 * Source Descriptor Table Row Variables
+	*/
+	private int tableSourceDescriptor_FileDelim_RowNum = 0;
+	private int tableSourceDescriptor_FileFixed_RowNum = 0;
+	private int tableSourceDescriptor_Database_RowNum = 0;
+	private int tableSourceDescriptor_DetailFileDelim_RowNum = 0;
+	private int tableSourceDescriptor_DetailFileFixed_RowNum = 0;
+	private int tableSourceDescriptor_DetailDatabase_RowNum = 0;
+	
+	/*
+	 * OysterRunScript Fields
 	 */
 	private JPanel panel_OysterRunScript;
 	private JPanel panelRunScript_Comment;
@@ -219,22 +261,51 @@ public class OysterRun {
 	private JLabel labelRunScript_LinkOutputPath;
 	private JButton btnAttributes_XMLfileSelect;
 	private JTextField textAttributes_XMLfilePath;
-
-	/**
-	 * TODO : Should I Change to Private ?
+	private JScrollPane scrollPaneRunScript_ReferenceSources;
+	private JTable tableRunScript_ReferenceSources;
+	private JPanel panelRunScript_ReferenceSources;
+	private JButton btnRunScript_ReferenceSourcesLoad;
+	private JPanel panelRunScript_Attributes;
+	private JTextField textRunScript_AttributesPath;
+	private JButton btnRunScript_AttributesSelect;
+	private JLabel labelRunScript_AttributesPath;
+	
+	/*
+	 * Run Script Table Row Variables
 	 */
+	private int tableRunScript_ReferenceSources_RowNum = 0;
+	
+	/*
+	Menu Bar Fields
+	*/
+	private JMenu mnHelp;
+	private JMenuItem mntmAboutOysterScriptor;
+	private JMenuBar menuBar;
+	private JMenuItem mntmExit;
+	private JMenuItem mntmSave;
+	private JMenu mnFileMenu;
+	private JSeparator separator;
+	private JToolBar toolBar;
+	private JButton btnSave;
+	private JLabel label_ERIQ;
 
-	public static OysterDataBinding dbBindingIdentityInput = new OysterDataBinding();
-	public static OysterDataBinding dbBindingRefrenceSource = new OysterDataBinding();
+	XMLTreeViewer treeViewer = new XMLTreeViewer();
 
-	public static OysterDataBinding.DatabaseConfig dbConfigIdentityInput = dbBindingIdentityInput.new DatabaseConfig(
+	private JPanel panelAttributes_XMLfilePath;
+	private static boolean error;
+	
+
+	protected static OysterDataBinding dbBindingIdentityInput = new OysterDataBinding();
+	protected static OysterDataBinding dbBindingRefrenceSource = new OysterDataBinding();
+
+	protected static OysterDataBinding.DatabaseConfig dbConfigIdentityInput = dbBindingIdentityInput.new DatabaseConfig(
 			"IdentityInput");
-	public static OysterDataBinding.DatabaseConfig dbConfigRefrenceSource = dbBindingRefrenceSource.new DatabaseConfig(
+	protected static OysterDataBinding.DatabaseConfig dbConfigRefrenceSource = dbBindingRefrenceSource.new DatabaseConfig(
 			"RefrenceSource");
 
-	public OysterDbConnectionFrame dbFrameIdentityInput = new OysterDbConnectionFrame(
+	protected OysterDbConnectionFrame dbFrameIdentityInput = new OysterDbConnectionFrame(
 			"IdentityInput");
-	public OysterDbConnectionFrame dbFrameRefrenceSource = new OysterDbConnectionFrame(
+	protected OysterDbConnectionFrame dbFrameRefrenceSource = new OysterDbConnectionFrame(
 			"RefrenceSource");
 	
 	OysterRunScript.Comments commentRunScript = new OysterRunScript.Comments();
@@ -345,6 +416,8 @@ public class OysterRun {
 												458, GroupLayout.PREFERRED_SIZE)));
 		frm_OysterGUIScriptor.getContentPane().setLayout(groupLayout);
 		frm_OysterGUIScriptor.setJMenuBar(getMenuBar());
+		
+		//frm_OysterGUIScriptor.pack();
 	}
 
 	/**
@@ -360,8 +433,8 @@ public class OysterRun {
 			tabbedPane_Oyster.addTab("Run Script", null,
 					getPanel_OysterRunScript(), null);
 		}
-		//tabbedPane_Oyster.setSelectedIndex(1);
-		//tabbedPane_Oyster.setEnabledAt(0, false);
+		tabbedPane_Oyster.setSelectedIndex(1);
+		tabbedPane_Oyster.setEnabledAt(0, false);
 		
 		return tabbedPane_Oyster;
 	}
@@ -383,6 +456,44 @@ public class OysterRun {
 			panel_OysterAttributes.add(scrollPane);
 			
 			JTree tree = new JTree();
+			tree.setModel(new DefaultTreeModel(
+				new DefaultMutableTreeNode("Rules") {
+					{
+						DefaultMutableTreeNode node_1;
+						DefaultMutableTreeNode node_2;
+						node_1 = new DefaultMutableTreeNode("Rule 1");
+							node_2 = new DefaultMutableTreeNode("Ident = ");
+								node_2.add(new DefaultMutableTreeNode("Match ="));
+							node_1.add(node_2);
+							node_2 = new DefaultMutableTreeNode("Ident = ");
+								node_2.add(new DefaultMutableTreeNode("Match ="));
+							node_1.add(node_2);
+						add(node_1);
+						node_1 = new DefaultMutableTreeNode("Rule 2");
+							node_2 = new DefaultMutableTreeNode("Ident = ");
+								node_2.add(new DefaultMutableTreeNode("Match ="));
+							node_1.add(node_2);
+						add(node_1);
+						node_1 = new DefaultMutableTreeNode("Rule 3");
+							node_2 = new DefaultMutableTreeNode("Ident = ");
+								node_2.add(new DefaultMutableTreeNode("Match ="));
+							node_1.add(node_2);
+							node_2 = new DefaultMutableTreeNode("Ident = ");
+								node_2.add(new DefaultMutableTreeNode("Match ="));
+							node_1.add(node_2);
+							node_2 = new DefaultMutableTreeNode("Ident = ");
+								node_2.add(new DefaultMutableTreeNode("Match ="));
+							node_1.add(node_2);
+							node_2 = new DefaultMutableTreeNode("Ident = ");
+								node_2.add(new DefaultMutableTreeNode("Match ="));
+							node_1.add(node_2);
+							node_2 = new DefaultMutableTreeNode("Ident =");
+								node_2.add(new DefaultMutableTreeNode("Match ="));
+							node_1.add(node_2);
+						add(node_1);
+					}
+				}
+			));
 			scrollPane.setViewportView(tree);
 			
 			JScrollPane scrollPane_1 = new JScrollPane();
@@ -1643,35 +1754,6 @@ public class OysterRun {
 		return textAttributes_XMLfilePath;
 	}
 
-	XMLTreeViewer treeViewer = new XMLTreeViewer();
-	private JPanel panelSourceDescriptor_AddSource;
-	public static JComboBox comboBoxSourceDescriptor_AddSourceType;
-	private JPanel panelSourceDescriptor_Sources;
-	private JTabbedPane tabbedPaneSourceDescriptor_Sources;
-	private JMenuBar menuBar;
-	private JMenuItem mntmExit;
-	private JMenuItem mntmSave;
-	private JMenu mnFileMenu;
-	private JSeparator separator;
-	private JToolBar toolBar;
-	private JButton btnSave;
-	private JPanel panelSourceDescriptor_AddTextFile;
-	private JPanel panelSourceDescriptor_DeleteSource;
-	private JPanel panelAttributes_XMLfilePath;
-	private JButton btnSourceDescriptor_AddFileSelect;
-	private JTextField textSourceDescriptor_AddFilePath;
-	private JLabel label_ERIQ;
-	private JMenu mnHelp;
-	private JMenuItem mntmAboutOysterScriptor;
-	private JScrollPane scrollPaneRunScript_ReferenceSources;
-	private JTable tableRunScript_ReferenceSources;
-	private JScrollPane scrollPaneSourceDescriptor_Database;
-	private JTable tableSourceDescriptor_Database;
-	private JScrollPane scrollPaneSourceDescriptor_FileDelim;
-	private JTable tableSourceDescriptor_FileDelim;
-	private JScrollPane scrollPaneSourceDescriptor_FileFixed;
-	private JTable tableSourceDescriptor_FileFixed;
-
 	private class BtnAttributes_XMLfileSelectAction implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 
@@ -1866,6 +1948,29 @@ public class OysterRun {
 					null, getScrollPaneSourceDescriptor_FileDelim(), null);
 
 			tabbedPaneSourceDescriptor_Sources.setSelectedIndex(2);
+			tabbedPaneSourceDescriptor_Sources.addChangeListener(new ChangeListener(){
+
+				@Override
+				public void stateChanged(ChangeEvent arg0) {
+					
+					if ( tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 0 ){
+						scrollPaneSourceDescriptor_DetailDatabase.setVisible(true);
+						scrollPaneSourceDescriptor_DetailFileFixed.setVisible(false);
+						scrollPaneSourceDescriptor_DetailFileDelim.setVisible(false);
+					}
+					else if ( tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 1 ){
+						scrollPaneSourceDescriptor_DetailDatabase.setVisible(false);
+						scrollPaneSourceDescriptor_DetailFileFixed.setVisible(true);
+						scrollPaneSourceDescriptor_DetailFileDelim.setVisible(false);
+					}
+					else if ( tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 2 ){
+						scrollPaneSourceDescriptor_DetailDatabase.setVisible(false);
+						scrollPaneSourceDescriptor_DetailFileFixed.setVisible(false);
+						scrollPaneSourceDescriptor_DetailFileDelim.setVisible(true);
+					}
+				}
+				
+			});
 		}
 		return tabbedPaneSourceDescriptor_Sources;
 	}
@@ -2244,34 +2349,6 @@ public class OysterRun {
 		}
 		return textSourceDescriptor_AddFilePath;
 	}
-
-	private int tableSourceDescriptor_FileDelim_RowNum = 0;
-	private int tableSourceDescriptor_FileFixed_RowNum = 0;
-	private int tableSourceDescriptor_Database_RowNum = 0;
-	private int tableRunScript_ReferenceSources_RowNum = 0;
-	private int tableSourceDescriptor_DetailFileDelim_RowNum = 0;
-	private int tableSourceDescriptor_DetailFileFixed_RowNum = 0;
-	private int tableSourceDescriptor_DetailDatabase_RowNum = 0;
-
-	private JPanel panelRunScript_ReferenceSources;
-	private JButton btnRunScript_ReferenceSourcesLoad;
-	private JPanel panelSourceDescriptor_SourcesDetail;
-	private JScrollPane scrollPaneSourceDescriptor_DetailFileFixed;
-	private JTable tableSourceDescriptor_DetailFileFixed;
-	private JScrollPane scrollPaneSourceDescriptor_DetailFileDelim;
-	private JTable tableSourceDescriptor_DetailFileDelim;
-	private JPanel panelRunScript_Attributes;
-	private JTextField textRunScript_AttributesPath;
-	private JButton btnRunScript_AttributesSelect;
-	private JLabel labelRunScript_AttributesPath;
-	private JScrollPane scrollPaneSourceDescriptor_DetailDatabase;
-	private JTable tableSourceDescriptor_DetailDatabase;
-	private JLabel labelSourceDescriptor_SourceName;
-	private JButton btnSourceDescriptor_DeleteSourceName;
-	private JLabel lblSourceType;
-	private JButton btnSourceDescriptor_CreateSourcedescriptor;
-	public static JButton btnSourceDescriptor_RefreshDb;
-	private JButton btnSourceDescriptor_LoadAttributesFile;
 
 	private class BtnSourceDescriptor_AddFileSelectAction implements
 			ActionListener {
@@ -3250,21 +3327,7 @@ public class OysterRun {
 
 	private JTable getTableSourceDescriptor_DetailFileDelim() {
 		if (tableSourceDescriptor_DetailFileDelim == null) {
-			tableSourceDescriptor_DetailFileDelim = new JTable()
-//			{
-				
-//			public TableCellEditor getCellEditor(int row, int column) {
-//				   Object value = super.getValueAt(row, column);
-//				   if(value != null) {
-//				      if(value instanceof JComboBox) {
-//				           return new DefaultCellEditor((JComboBox)value);
-//				      }
-//				            return getDefaultEditor(value.getClass());
-//				   }
-//				   return super.getCellEditor(row, column);
-//				}
-//			}
-			;
+			tableSourceDescriptor_DetailFileDelim = new JTable();
 			tableSourceDescriptor_DetailFileDelim.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tableSourceDescriptor_DetailFileDelim
 					.setSelectionBackground(SystemColor.DARK_GRAY);
@@ -3554,10 +3617,6 @@ public class OysterRun {
 			
 		}
 	}
-private static boolean error;
-private JTextField textField;
-private JTable table_1;
-private JPanel panel_1;
 
 	private void createSourceDescriptor() {
 		oysterReferenceSource.clearOysterReferenceItem();
@@ -4294,10 +4353,6 @@ private JPanel panel_1;
 
 	private class ComboBoxRenderer extends JComboBox implements TableCellRenderer {
 		   
-
-		private static final long serialVersionUID = -4713817953183237573L;
-
-
 		public ComboBoxRenderer(String[] items) {
 		        super(items);
 		    }
@@ -4350,6 +4405,7 @@ private JPanel panel_1;
 		}
 		return textField;
 	}
+	
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
