@@ -1,5 +1,13 @@
 package edu.ualr.oyster.gui;
 
-public class OysterSourceDescriptorPanel {
+import javax.swing.JPanel;
+
+public class OysterSourceDescriptorPanel extends JPanel {
+
+
+	public OysterSourceDescriptorPanel() {
+		setLayout(null);
+
+	}
 
 }

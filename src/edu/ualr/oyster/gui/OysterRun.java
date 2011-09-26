@@ -132,6 +132,7 @@ import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.border.EtchedBorder;
 
 /**
  * OysterRun.java
@@ -149,19 +150,8 @@ public class OysterRun {
 	/*
 	 * OysterAttributes Fields
 	 */
-	private JPanel panel_OysterAttributes;
-	private JPanel panelAttributes_Comment;
-	private JTextField textFieldAttributes_Document;
-	private JTextField textFieldAttributes_CreatedOn;
-	private JTextField textFieldAttributes_Author;
-	private JLabel labelAttributes_Description;
-	private JLabel labelAttributes_Author;
-	private JLabel labelAttributes_CreatedOn;
-	private JLabel labelAttributes_Document;
-	private JTextArea textAreaAttributes_Description;
-	private JTextField textField;
-	private JTable table_1;
-	private JPanel panel_1;
+	private OysterAttributesPanel panel_OysterAttributes;
+
 	
 	/*
 	 * OysterSourceDescriptor Fields
@@ -183,17 +173,17 @@ public class OysterRun {
 	private JPanel panelSourceDescriptor_Sources;
 	private JTabbedPane tabbedPaneSourceDescriptor_Sources;
 	private JScrollPane scrollPaneSourceDescriptor_Database;
-	private JTable tableSourceDescriptor_Database;
+	private OysterTable tableSourceDescriptor_Database;
 	private JScrollPane scrollPaneSourceDescriptor_FileDelim;
-	private JTable tableSourceDescriptor_FileDelim;
+	private OysterTable tableSourceDescriptor_FileDelim;
 	private JScrollPane scrollPaneSourceDescriptor_FileFixed;
-	private JTable tableSourceDescriptor_FileFixed;
+	private OysterTable tableSourceDescriptor_FileFixed;
 	private JPanel panelSourceDescriptor_AddTextFile;
 	private JPanel panelSourceDescriptor_DeleteSource;
 	private JButton btnSourceDescriptor_AddFileSelect;
 	private JTextField textSourceDescriptor_AddFilePath;
 	private JScrollPane scrollPaneSourceDescriptor_DetailDatabase;
-	private JTable tableSourceDescriptor_DetailDatabase;
+	private OysterTable tableSourceDescriptor_DetailDatabase;
 	private JLabel labelSourceDescriptor_SourceName;
 	private JButton btnSourceDescriptor_DeleteSourceName;
 	private JLabel lblSourceType;
@@ -202,9 +192,9 @@ public class OysterRun {
 	private JButton btnSourceDescriptor_LoadAttributesFile;
 	private JPanel panelSourceDescriptor_SourcesDetail;
 	private JScrollPane scrollPaneSourceDescriptor_DetailFileFixed;
-	private JTable tableSourceDescriptor_DetailFileFixed;
+	private OysterTable tableSourceDescriptor_DetailFileFixed;
 	private JScrollPane scrollPaneSourceDescriptor_DetailFileDelim;
-	private JTable tableSourceDescriptor_DetailFileDelim;
+	private OysterTable tableSourceDescriptor_DetailFileDelim;
 	
 	/*
 	 * Source Descriptor Table Row Variables
@@ -259,10 +249,8 @@ public class OysterRun {
 	private JTextField textRunScript_LinkOutputPath;
 	private JButton btnRunScript_LinkOutputSelect;
 	private JLabel labelRunScript_LinkOutputPath;
-	private JButton btnAttributes_XMLfileSelect;
-	private JTextField textAttributes_XMLfilePath;
 	private JScrollPane scrollPaneRunScript_ReferenceSources;
-	private JTable tableRunScript_ReferenceSources;
+	private OysterTable tableRunScript_ReferenceSources;
 	private JPanel panelRunScript_ReferenceSources;
 	private JButton btnRunScript_ReferenceSourcesLoad;
 	private JPanel panelRunScript_Attributes;
@@ -286,12 +274,10 @@ public class OysterRun {
 	private JMenu mnFileMenu;
 	private JSeparator separator;
 	private JToolBar toolBar;
-	private JButton btnSave;
+	protected static JButton btnSave;
 	private JLabel label_ERIQ;
 
 	XMLTreeViewer treeViewer = new XMLTreeViewer();
-
-	private JPanel panelAttributes_XMLfilePath;
 	private static boolean error;
 	
 
@@ -308,17 +294,15 @@ public class OysterRun {
 	protected OysterDbConnectionFrame dbFrameRefrenceSource = new OysterDbConnectionFrame(
 			"RefrenceSource");
 	
-	OysterRunScript.Comments commentRunScript = new OysterRunScript.Comments();
-
-	OysterRunScript.Comments commentSourceDescriptor = new OysterRunScript.Comments();
-
-	OysterRunScript.LogSettings logSettings = new OysterRunScript.LogSettings();
-	OysterRunScript.LogFile logFile = new OysterRunScript.LogFile();
-	OysterRunScript.AttributePath attributePath = new OysterRunScript.AttributePath();
-	OysterRunScript.EREngine erEngine = new OysterRunScript.EREngine();
-	OysterRunScript.IdentityInput identityInput = new OysterRunScript.IdentityInput();
-	OysterRunScript.IdentityOutput identityOutput = new OysterRunScript.IdentityOutput();
-	OysterRunScript.LinkOutput linkOutput = new OysterRunScript.LinkOutput();
+	protected OysterRunScript.Comments commentRunScript = new OysterRunScript.Comments();
+	protected OysterRunScript.Comments commentSourceDescriptor = new OysterRunScript.Comments();
+	protected OysterRunScript.LogSettings logSettings = new OysterRunScript.LogSettings();
+	protected OysterRunScript.LogFile logFile = new OysterRunScript.LogFile();
+	protected OysterRunScript.AttributePath attributePath = new OysterRunScript.AttributePath();
+	protected OysterRunScript.EREngine erEngine = new OysterRunScript.EREngine();
+	protected OysterRunScript.IdentityInput identityInput = new OysterRunScript.IdentityInput();
+	protected OysterRunScript.IdentityOutput identityOutput = new OysterRunScript.IdentityOutput();
+	protected OysterRunScript.LinkOutput linkOutput = new OysterRunScript.LinkOutput();
 
 	private OysterReferenceSource referenceSource = new OysterReferenceSource();
 	private OysterAttributes attributes = new OysterAttributes();
@@ -365,55 +349,31 @@ public class OysterRun {
 		frm_OysterGUIScriptor.setIconImage(Toolkit.getDefaultToolkit()
 				.getImage(
 						OysterRun.class
-								.getResource("/edu/ualr/oyster/gui/icon.png")));
+								.getResource("/edu/ualr/oyster/gui/trayc.png")));
 		frm_OysterGUIScriptor.setTitle("Oyster GUI Scriptor");
 		frm_OysterGUIScriptor.setBounds(100, 100, 1155, 562);
 		frm_OysterGUIScriptor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GroupLayout groupLayout = new GroupLayout(
 				frm_OysterGUIScriptor.getContentPane());
-		groupLayout.setHorizontalGroup(groupLayout
-				.createParallelGroup(Alignment.LEADING)
-				.addGroup(
-						groupLayout
-								.createSequentialGroup()
-								.addComponent(getToolBar(),
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED,
-										875, Short.MAX_VALUE)
-								.addComponent(getLabel_ERIQlogo()))
-				.addComponent(getTabbedPane_OysterScriptor(),
-						GroupLayout.DEFAULT_SIZE, 1086, Short.MAX_VALUE));
-		groupLayout
-				.setVerticalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addContainerGap()
-																		.addComponent(
-																				getToolBar(),
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																getLabel_ERIQlogo()))
-										.addPreferredGap(
-												ComponentPlacement.RELATED,
-												GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(
-												getTabbedPane_OysterScriptor(),
-												GroupLayout.PREFERRED_SIZE,
-												458, GroupLayout.PREFERRED_SIZE)));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(getToolBar(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 956, Short.MAX_VALUE)
+					.addComponent(getLabel_ERIQlogo()))
+				.addComponent(getTabbedPane_OysterScriptor(), GroupLayout.DEFAULT_SIZE, 1145, Short.MAX_VALUE)
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(getToolBar(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(getLabel_ERIQlogo(), GroupLayout.PREFERRED_SIZE, 43, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(getTabbedPane_OysterScriptor(), GroupLayout.PREFERRED_SIZE, 458, GroupLayout.PREFERRED_SIZE))
+		);
 		frm_OysterGUIScriptor.getContentPane().setLayout(groupLayout);
 		frm_OysterGUIScriptor.setJMenuBar(getMenuBar());
 		
@@ -433,8 +393,8 @@ public class OysterRun {
 			tabbedPane_Oyster.addTab("Run Script", null,
 					getPanel_OysterRunScript(), null);
 		}
-		tabbedPane_Oyster.setSelectedIndex(1);
-		tabbedPane_Oyster.setEnabledAt(0, false);
+		//tabbedPane_Oyster.setSelectedIndex(1);
+		//tabbedPane_Oyster.setEnabledAt(0, false);
 		
 		return tabbedPane_Oyster;
 	}
@@ -443,230 +403,10 @@ public class OysterRun {
 	 * Create Oyster Attributes Panel
 	 */
 	private JPanel getPanel_OysterAttributes() {
-		if (panel_OysterAttributes == null) {
-			panel_OysterAttributes = new JPanel();
-			panel_OysterAttributes
-					.addComponentListener(new Panel_OysterAttributesComponent());
-			panel_OysterAttributes.setLayout(null);
-			panel_OysterAttributes.add(getPanelAttributes_Comment());
-			panel_OysterAttributes.add(getPanelAttributes_XMLfilePath());
-			
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBounds(814, 11, 310, 408);
-			panel_OysterAttributes.add(scrollPane);
-			
-			JTree tree = new JTree();
-			tree.setModel(new DefaultTreeModel(
-				new DefaultMutableTreeNode("Rules") {
-					{
-						DefaultMutableTreeNode node_1;
-						DefaultMutableTreeNode node_2;
-						node_1 = new DefaultMutableTreeNode("Rule 1");
-							node_2 = new DefaultMutableTreeNode("Ident = ");
-								node_2.add(new DefaultMutableTreeNode("Match ="));
-							node_1.add(node_2);
-							node_2 = new DefaultMutableTreeNode("Ident = ");
-								node_2.add(new DefaultMutableTreeNode("Match ="));
-							node_1.add(node_2);
-						add(node_1);
-						node_1 = new DefaultMutableTreeNode("Rule 2");
-							node_2 = new DefaultMutableTreeNode("Ident = ");
-								node_2.add(new DefaultMutableTreeNode("Match ="));
-							node_1.add(node_2);
-						add(node_1);
-						node_1 = new DefaultMutableTreeNode("Rule 3");
-							node_2 = new DefaultMutableTreeNode("Ident = ");
-								node_2.add(new DefaultMutableTreeNode("Match ="));
-							node_1.add(node_2);
-							node_2 = new DefaultMutableTreeNode("Ident = ");
-								node_2.add(new DefaultMutableTreeNode("Match ="));
-							node_1.add(node_2);
-							node_2 = new DefaultMutableTreeNode("Ident = ");
-								node_2.add(new DefaultMutableTreeNode("Match ="));
-							node_1.add(node_2);
-							node_2 = new DefaultMutableTreeNode("Ident = ");
-								node_2.add(new DefaultMutableTreeNode("Match ="));
-							node_1.add(node_2);
-							node_2 = new DefaultMutableTreeNode("Ident =");
-								node_2.add(new DefaultMutableTreeNode("Match ="));
-							node_1.add(node_2);
-						add(node_1);
-					}
-				}
-			));
-			scrollPane.setViewportView(tree);
-			
-			JScrollPane scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(375, 42, 294, 248);
-			panel_OysterAttributes.add(scrollPane_1);
-			
-			table_1 = new JTable();
-			scrollPane_1.setViewportView(table_1);
-			panel_OysterAttributes.add(getTextField());
-			
-			JLabel lblRuleName = new JLabel("Rule Name:");
-			lblRuleName.setBounds(375, 11, 84, 20);
-			panel_OysterAttributes.add(lblRuleName);
-			
-			JPanel panel = new JPanel();
-			panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel.setBounds(375, 301, 294, 41);
-			panel_OysterAttributes.add(panel);
-			GroupLayout gl_panel = new GroupLayout(panel);
-			gl_panel.setHorizontalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGap(0, 282, Short.MAX_VALUE)
-			);
-			gl_panel.setVerticalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGap(0, 28, Short.MAX_VALUE)
-			);
-			panel.setLayout(gl_panel);
-			panel_OysterAttributes.add(getPanel_1());
-		}
+		panel_OysterAttributes = new OysterAttributesPanel().getPanel();
 		return panel_OysterAttributes;
 	}
 
-	private JPanel getPanelAttributes_Comment() {
-		if (panelAttributes_Comment == null) {
-			panelAttributes_Comment = new JPanel();
-			panelAttributes_Comment.setBounds(10, 11, 355, 159);
-			panelAttributes_Comment.setBorder(new TitledBorder(null, "Comment",
-					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelAttributes_Comment.setDoubleBuffered(false);
-			GroupLayout gl_panelAttributes_Comment = new GroupLayout(
-					panelAttributes_Comment);
-			gl_panelAttributes_Comment.setHorizontalGroup(
-				gl_panelAttributes_Comment.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-						.addGroup(gl_panelAttributes_Comment.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addGap(31)
-								.addComponent(getLabelAttributes_Author())
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getTextFieldAttributes_CreatedOn(), GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addGap(11)
-								.addComponent(getLabelAttributes_Description())
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getTextAreaAttributes_Description(), GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addGap(16)
-								.addComponent(getLabelAttributes_Document())
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getTextFieldAttributes_Document(), GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addGap(10)
-								.addComponent(getLabelAttributes_CreatedOn())
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getTextFieldAttributes_Author(), GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)))
-						.addContainerGap())
-			);
-			gl_panelAttributes_Comment.setVerticalGroup(
-				gl_panelAttributes_Comment.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-						.addGroup(gl_panelAttributes_Comment.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addGap(3)
-								.addComponent(getLabelAttributes_Document()))
-							.addComponent(getTextFieldAttributes_Document(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panelAttributes_Comment.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addGap(9)
-								.addComponent(getLabelAttributes_CreatedOn()))
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getTextFieldAttributes_Author(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panelAttributes_Comment.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addGap(9)
-								.addComponent(getLabelAttributes_Author()))
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getTextFieldAttributes_CreatedOn(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panelAttributes_Comment.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addGap(13)
-								.addComponent(getLabelAttributes_Description()))
-							.addGroup(gl_panelAttributes_Comment.createSequentialGroup()
-								.addGap(6)
-								.addComponent(getTextAreaAttributes_Description(), GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
-						.addGap(34))
-			);
-			panelAttributes_Comment.setLayout(gl_panelAttributes_Comment);
-		}
-		return panelAttributes_Comment;
-	}
-
-	private JLabel getLabelAttributes_Description() {
-		if (labelAttributes_Description == null) {
-			labelAttributes_Description = new JLabel();
-			labelAttributes_Description.setText("Description:");
-		}
-		return labelAttributes_Description;
-	}
-
-	private JLabel getLabelAttributes_Author() {
-		if (labelAttributes_Author == null) {
-			labelAttributes_Author = new JLabel();
-			labelAttributes_Author.setText("Author:");
-		}
-		return labelAttributes_Author;
-	}
-
-	private JLabel getLabelAttributes_CreatedOn() {
-		if (labelAttributes_CreatedOn == null) {
-			labelAttributes_CreatedOn = new JLabel();
-			labelAttributes_CreatedOn.setText("Created on:");
-		}
-		return labelAttributes_CreatedOn;
-	}
-
-	private JLabel getLabelAttributes_Document() {
-		if (labelAttributes_Document == null) {
-			labelAttributes_Document = new JLabel();
-			labelAttributes_Document.setText("Document:");
-		}
-		return labelAttributes_Document;
-	}
-
-	private JTextField getTextFieldAttributes_Document() {
-		if (textFieldAttributes_Document == null) {
-			textFieldAttributes_Document = new JTextField();
-			textFieldAttributes_Document
-					.setBackground(SystemColor.controlHighlight);
-		}
-		return textFieldAttributes_Document;
-	}
-
-	private JTextField getTextFieldAttributes_Author() {
-		if (textFieldAttributes_CreatedOn == null) {
-			textFieldAttributes_CreatedOn = new JTextField();
-			textFieldAttributes_CreatedOn
-					.setBackground(SystemColor.controlHighlight);
-		}
-		return textFieldAttributes_CreatedOn;
-	}
-
-	private JTextField getTextFieldAttributes_CreatedOn() {
-		if (textFieldAttributes_Author == null) {
-			textFieldAttributes_Author = new JTextField();
-			textFieldAttributes_Author
-					.setBackground(SystemColor.controlHighlight);
-		}
-		return textFieldAttributes_Author;
-	}
-
-	private JTextArea getTextAreaAttributes_Description() {
-		if (textAreaAttributes_Description == null) {
-			textAreaAttributes_Description = new JTextArea();
-			textAreaAttributes_Description.setBorder(UIManager
-					.getBorder("TitledBorder.border"));
-			textAreaAttributes_Description.setBackground(UIManager
-					.getColor("controlHighlight"));
-		}
-		return textAreaAttributes_Description;
-	}
 
 	/**
 	 * Create Oyster SourceDescriptor Panel
@@ -1734,62 +1474,6 @@ public class OysterRun {
 		return labelRunScript_LinkOutputPath;
 	}
 
-	private JButton getBtnAttributes_XMLfileSelect() {
-		if (btnAttributes_XMLfileSelect == null) {
-			btnAttributes_XMLfileSelect = new JButton("Select..");
-			btnAttributes_XMLfileSelect
-					.addActionListener(new BtnAttributes_XMLfileSelectAction());
-		}
-		return btnAttributes_XMLfileSelect;
-	}
-
-	private JTextField getTextAttributes_XMLfilePath() {
-		if (textAttributes_XMLfilePath == null) {
-			textAttributes_XMLfilePath = new JTextField();
-			textAttributes_XMLfilePath.setEnabled(false);
-			textAttributes_XMLfilePath
-					.setText(" Absolute Path to OysterAttributes.xml File");
-			textAttributes_XMLfilePath.setColumns(10);
-		}
-		return textAttributes_XMLfilePath;
-	}
-
-	private class BtnAttributes_XMLfileSelectAction implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-
-			// Open xml file
-			JFileChooser fileopen = new JFileChooser();
-			FileFilter filter = new FileNameExtensionFilter("XML Files", "xml");
-			fileopen.addChoosableFileFilter(filter);
-			File file = null;
-
-			int ret = fileopen.showDialog(null, "Open file");
-
-			if (ret == JFileChooser.APPROVE_OPTION) {
-				file = fileopen.getSelectedFile();
-				textAttributes_XMLfilePath.setText(file.getPath());
-				treeViewer.createUI(file);
-
-				// OysterAttributes attributes = new OysterAttributes();
-				// attributes = OysterAttributesParser.parse(file);
-				//
-				// OysterSourceDescriptorParser.parse(file.getAbsolutePath());
-				//
-				// Hashtable<OysterAttribute, OysterComparator> attrComp =
-				// attributes
-				// .getAttrComp();
-				// // Show all Attribute in hash table.
-				//
-				// Enumeration<OysterAttribute> Attributes;
-				// Attributes = attrComp.keys();
-				// while (Attributes.hasMoreElements()) {
-				// String str = (String) Attributes.nextElement().getName();
-				// System.out.println(str);
-				// }
-			}
-		}
-	}
-
 	private JPanel getPanelSourceDescriptor_AddSource() {
 		if (panelSourceDescriptor_AddSource == null) {
 			panelSourceDescriptor_AddSource = new JPanel();
@@ -1869,18 +1553,18 @@ public class OysterRun {
 					
 					if( tableSourceDescriptor_DetailDatabase.getSelectedRow() > -1 )
 					{
-						ClearSelectedRow(tableSourceDescriptor_DetailDatabase);
-						tableSourceDescriptor_DetailDatabase_RowNum --;
+						tableSourceDescriptor_DetailDatabase.ClearSelectedRow();
+						tableSourceDescriptor_DetailDatabase_RowNum = tableSourceDescriptor_DetailDatabase.getRowCount();
 					}
 					else if( tableSourceDescriptor_DetailFileDelim.getSelectedRow() > -1 )
 					{
-						ClearSelectedRow(tableSourceDescriptor_DetailFileDelim);
-						tableSourceDescriptor_DetailFileDelim_RowNum --;
+						tableSourceDescriptor_DetailFileDelim.ClearSelectedRow();
+						tableSourceDescriptor_DetailFileDelim_RowNum =tableSourceDescriptor_DetailFileDelim.getRowCount();
 					}
 					else if ( tableSourceDescriptor_DetailFileFixed.getSelectedRow() > -1 )
 					{
-						ClearSelectedRow(tableSourceDescriptor_DetailFileFixed);
-						tableSourceDescriptor_DetailFileFixed_RowNum --;
+						tableSourceDescriptor_DetailFileFixed.ClearSelectedRow();
+						tableSourceDescriptor_DetailFileFixed_RowNum = tableSourceDescriptor_DetailFileFixed.getRowCount();
 					}
 					
 					if ( tableSourceDescriptor_DetailFileFixed.getRowCount() > 0 ||
@@ -1986,10 +1670,10 @@ public class OysterRun {
 		return scrollPaneSourceDescriptor_Database;
 	}
 
-	private JTable getTableSourceDescriptor_Database() {
+	private OysterTable getTableSourceDescriptor_Database() {
 
 		if (tableSourceDescriptor_Database == null) {
-			tableSourceDescriptor_Database = new JTable();
+			tableSourceDescriptor_Database = new OysterTable();
 			tableSourceDescriptor_Database.setRowMargin(0);
 			tableSourceDescriptor_Database.setRowHeight(20);
 			tableSourceDescriptor_Database.getTableHeader().setReorderingAllowed(false);
@@ -2043,6 +1727,12 @@ public class OysterRun {
 		if (menuBar == null) {
 			menuBar = new JMenuBar();
 			menuBar.add(getMnFileMenu());
+			
+			JMenu mnEdit = new JMenu("Edit");
+			menuBar.add(mnEdit);
+			
+			JMenuItem mntmEditFile = new JMenuItem("Edit <> File");
+			mnEdit.add(mntmEditFile);
 			menuBar.add(getMnHelp());
 		}
 		return menuBar;
@@ -2068,7 +1758,13 @@ public class OysterRun {
 		if (mnFileMenu == null) {
 			mnFileMenu = new JMenu("File");
 			mnFileMenu.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 12));
+			
+			JMenuItem mntmNewJob = new JMenuItem("New Job");
+			mnFileMenu.add(mntmNewJob);
 			mnFileMenu.add(getMntmSave());
+			
+			JMenuItem mntmLoad = new JMenuItem("Load");
+			mnFileMenu.add(mntmLoad);
 			mnFileMenu.add(getSeparator());
 			mnFileMenu.add(getMntmExit());
 		}
@@ -2277,57 +1973,6 @@ public class OysterRun {
 					.setLayout(gl_panelSourceDescriptor_DeleteSource);
 		}
 		return panelSourceDescriptor_DeleteSource;
-	}
-
-	private JPanel getPanelAttributes_XMLfilePath() {
-		if (panelAttributes_XMLfilePath == null) {
-			panelAttributes_XMLfilePath = new JPanel();
-			panelAttributes_XMLfilePath.setBounds(10, 174, 355, 64);
-			panelAttributes_XMLfilePath.setBorder(new TitledBorder(null, "",
-					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			GroupLayout gl_panelAttributes_XMLfilePath = new GroupLayout(
-					panelAttributes_XMLfilePath);
-			gl_panelAttributes_XMLfilePath
-					.setHorizontalGroup(gl_panelAttributes_XMLfilePath
-							.createParallelGroup(Alignment.LEADING)
-							.addGroup(
-									gl_panelAttributes_XMLfilePath
-											.createSequentialGroup()
-											.addContainerGap()
-											.addComponent(
-													getBtnAttributes_XMLfileSelect())
-											.addPreferredGap(
-													ComponentPlacement.RELATED)
-											.addComponent(
-													getTextAttributes_XMLfilePath(),
-													GroupLayout.DEFAULT_SIZE,
-													248, Short.MAX_VALUE)
-											.addContainerGap()));
-			gl_panelAttributes_XMLfilePath
-					.setVerticalGroup(gl_panelAttributes_XMLfilePath
-							.createParallelGroup(Alignment.LEADING)
-							.addGroup(
-									Alignment.TRAILING,
-									gl_panelAttributes_XMLfilePath
-											.createSequentialGroup()
-											.addContainerGap(17,
-													Short.MAX_VALUE)
-											.addGroup(
-													gl_panelAttributes_XMLfilePath
-															.createParallelGroup(
-																	Alignment.BASELINE)
-															.addComponent(
-																	getTextAttributes_XMLfilePath(),
-																	GroupLayout.PREFERRED_SIZE,
-																	GroupLayout.DEFAULT_SIZE,
-																	GroupLayout.PREFERRED_SIZE)
-															.addComponent(
-																	getBtnAttributes_XMLfileSelect()))
-											.addContainerGap()));
-			panelAttributes_XMLfilePath
-					.setLayout(gl_panelAttributes_XMLfilePath);
-		}
-		return panelAttributes_XMLfilePath;
 	}
 
 	private JButton getBtnSourceDescriptor_AddFileSelect() {
@@ -2974,7 +2619,7 @@ public class OysterRun {
 		if (label_ERIQ == null) {
 			label_ERIQ = new JLabel("");
 			label_ERIQ.setIcon(new ImageIcon(OysterRun.class
-					.getResource("/edu/ualr/oyster/gui/eriq.png")));
+					.getResource("/edu/ualr/oyster/gui/originaleriq.png")));
 		}
 		return label_ERIQ;
 	}
@@ -2983,6 +2628,12 @@ public class OysterRun {
 		if (mnHelp == null) {
 			mnHelp = new JMenu("Help");
 			mnHelp.add(getMntmAboutOysterScriptor());
+			
+			JMenuItem mntmUserGuide = new JMenuItem("User Guide");
+			mnHelp.add(mntmUserGuide);
+			
+			JMenuItem mntmDocumentation = new JMenuItem("Documentation");
+			mnHelp.add(mntmDocumentation);
 		}
 		return mnHelp;
 	}
@@ -3008,13 +2659,6 @@ public class OysterRun {
 		}
 	}
 
-	private class Panel_OysterAttributesComponent extends ComponentAdapter {
-		@Override
-		public void componentShown(ComponentEvent arg0) {
-			btnSave.setText("Save Attributes");
-			btnSave.setEnabled(false);
-		}
-	}
 
 	private class Panel_OysterSourceDescriptorComponent extends
 			ComponentAdapter {
@@ -3047,9 +2691,9 @@ public class OysterRun {
 		return scrollPaneRunScript_ReferenceSources;
 	}
 
-	private JTable getTableRunScript_ReferenceSources() {
+	private OysterTable getTableRunScript_ReferenceSources() {
 		if (tableRunScript_ReferenceSources == null) {
-			tableRunScript_ReferenceSources = new JTable();
+			tableRunScript_ReferenceSources = new OysterTable();
 			tableRunScript_ReferenceSources.setBackground(UIManager
 					.getColor("TabbedPane.light"));
 			tableRunScript_ReferenceSources
@@ -3099,9 +2743,9 @@ public class OysterRun {
 		return scrollPaneSourceDescriptor_FileDelim;
 	}
 
-	private JTable getTableSourceDescriptor_FileDelim() {
+	private OysterTable getTableSourceDescriptor_FileDelim() {
 		if (tableSourceDescriptor_FileDelim == null) {
-			tableSourceDescriptor_FileDelim = new JTable();
+			tableSourceDescriptor_FileDelim = new OysterTable();
 			tableSourceDescriptor_FileDelim
 					.setSelectionBackground(Color.DARK_GRAY);
 			tableSourceDescriptor_FileDelim.setBackground(UIManager
@@ -3145,9 +2789,9 @@ public class OysterRun {
 		return scrollPaneSourceDescriptor_FileFixed;
 	}
 
-	private JTable getTableSourceDescriptor_FileFixed() {
+	private OysterTable getTableSourceDescriptor_FileFixed() {
 		if (tableSourceDescriptor_FileFixed == null) {
-			tableSourceDescriptor_FileFixed = new JTable();
+			tableSourceDescriptor_FileFixed = new OysterTable();
 			tableSourceDescriptor_FileFixed
 					.setSelectionBackground(Color.DARK_GRAY);
 			tableSourceDescriptor_FileFixed.setRowHeight(20);
@@ -3157,9 +2801,6 @@ public class OysterRun {
 			tableSourceDescriptor_FileFixed.setModel(new DefaultTableModel(
 					new Object[][] {}, new String[] { "Source Name",
 							"Absolute Path to Fixed Text File" }) {
-				/**
-								 * 
-								 */
 								private static final long serialVersionUID = 1L;
 				Class[] columnTypes = new Class[] { String.class, JComboBox.class, JSpinner.class, JSpinner.class };
 
@@ -3283,9 +2924,9 @@ public class OysterRun {
 		return scrollPaneSourceDescriptor_DetailFileFixed;
 	}
 
-	private JTable getTableSourceDescriptor_DetailFileFixed() {
+	private OysterTable getTableSourceDescriptor_DetailFileFixed() {
 		if (tableSourceDescriptor_DetailFileFixed == null) {
-			tableSourceDescriptor_DetailFileFixed = new JTable();
+			tableSourceDescriptor_DetailFileFixed = new OysterTable();
 			tableSourceDescriptor_DetailFileFixed
 					.setBackground(SystemColor.control);
 			tableSourceDescriptor_DetailFileFixed
@@ -3325,9 +2966,9 @@ public class OysterRun {
 		return scrollPaneSourceDescriptor_DetailFileDelim;
 	}
 
-	private JTable getTableSourceDescriptor_DetailFileDelim() {
+	private OysterTable getTableSourceDescriptor_DetailFileDelim() {
 		if (tableSourceDescriptor_DetailFileDelim == null) {
-			tableSourceDescriptor_DetailFileDelim = new JTable();
+			tableSourceDescriptor_DetailFileDelim = new OysterTable();
 			tableSourceDescriptor_DetailFileDelim.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tableSourceDescriptor_DetailFileDelim
 					.setSelectionBackground(SystemColor.DARK_GRAY);
@@ -3483,9 +3124,9 @@ public class OysterRun {
 		return scrollPaneSourceDescriptor_DetailDatabase;
 	}
 
-	private JTable getTableSourceDescriptor_DetailDatabase() {
+	private OysterTable getTableSourceDescriptor_DetailDatabase() {
 		if (tableSourceDescriptor_DetailDatabase == null) {
-			tableSourceDescriptor_DetailDatabase = new JTable();
+			tableSourceDescriptor_DetailDatabase = new OysterTable();
 			tableSourceDescriptor_DetailDatabase
 					.setBackground(SystemColor.control);
 			tableSourceDescriptor_DetailDatabase
@@ -3497,10 +3138,6 @@ public class OysterRun {
 							"Attribute" },
 							tableSourceDescriptor_DetailDatabase_RowNum){
 
-						/**
-								 * 
-								 */
-								private static final long serialVersionUID = 1L;
 						Class[] columnTypes = new Class[] { String.class,
 								JComboBox.class };
 					
@@ -3561,12 +3198,19 @@ public class OysterRun {
 		 */
 		private void SourceDescriptorTab_ResetSources() {
 
-			ClearTable(tableSourceDescriptor_Database);
+			tableSourceDescriptor_Database.ClearTable();
 			tableSourceDescriptor_Database_RowNum = 0;
-			ClearTable(tableSourceDescriptor_FileFixed);
+			tableSourceDescriptor_FileFixed.ClearTable();
 			tableSourceDescriptor_FileFixed_RowNum = 0;
-			ClearTable(tableSourceDescriptor_FileDelim);
+			tableSourceDescriptor_FileDelim.ClearTable();
 			tableSourceDescriptor_FileDelim_RowNum = 0;
+			
+			tableSourceDescriptor_DetailDatabase.ClearTable();
+			tableSourceDescriptor_DetailDatabase_RowNum = 0;
+			tableSourceDescriptor_DetailFileFixed.ClearTable();
+			tableSourceDescriptor_DetailFileFixed_RowNum = 0;
+			tableSourceDescriptor_DetailFileDelim.ClearTable();
+			tableSourceDescriptor_DetailFileDelim_RowNum = 0;
 		}
 	}
 
@@ -3622,11 +3266,169 @@ public class OysterRun {
 		oysterReferenceSource.clearOysterReferenceItem();
 		
 		saveSourceDescriptor();
+		CheckSourceDescriptorErrors();		
 		
+		//JTable tableUsed = null;
+		
+		// clear the Stringbuffer content
+		OysterSourceDescriptorXml.delete(0, OysterSourceDescriptorXml.length());
+
+		// XML Declaration and Comments
+		OysterSourceDescriptorXml
+				.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("<!--");
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("    ");
+		OysterSourceDescriptorXml.append("Document: ");
+		OysterSourceDescriptorXml.append(commentSourceDescriptor.getDocument());
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("    ");
+		OysterSourceDescriptorXml.append("Created on: ");
+		OysterSourceDescriptorXml
+				.append(commentSourceDescriptor.getCreatedOn());
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("    ");
+		OysterSourceDescriptorXml.append("Author: ");
+		OysterSourceDescriptorXml.append(commentSourceDescriptor.getAuthor());
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("    ");
+		OysterSourceDescriptorXml.append("Description: ");
+		OysterSourceDescriptorXml.append(commentSourceDescriptor
+				.getDescription());
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("-->");
+		OysterSourceDescriptorXml.append("\n");
+
+		// <OysterRunScript> start Tag
+		OysterSourceDescriptorXml.append("<OysterSourceDescriptor>");
+		OysterSourceDescriptorXml.append("\n");
+
+		OysterSourceDescriptorXml.append("    ");
+		OysterSourceDescriptorXml
+				.append("<!-- Types of Sources (Only one can be defined) -->");
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("    ");
+
+		String sourceType = oysterReferenceSource.getSourceType();
+
+		if (sourceType == "Database") {
+
+			OysterSourceDescriptorXml.append("<Source Type=\"Database\" SID=\"" + oysterReferenceSource.getSid() + "\" UserID=\"" 
+					+ oysterReferenceSource.getUserID() + "\" Passwd=\"" + oysterReferenceSource.getPasswd() + "\" CType=\"" 
+					+ oysterReferenceSource.getConnectionType() + "\">" + oysterReferenceSource.getTable() + "</Source>");
+				
+			//tableUsed = tableSourceDescriptor_Database;
+			
+		} else if (sourceType == "FileFixed") {
+			OysterSourceDescriptorXml
+			.append("<Source Type=\"FileFixed\">"
+					+ oysterReferenceSource.getSourcePath()
+					+ "</Source>");
+			
+			//tableUsed = tableSourceDescriptor_FileFixed;
+			
+		} else if (sourceType == "FileDelim") {
+			String label;
+			if(oysterReferenceSource.isLabel())
+				label = "Y";
+			else
+				label = "N";
+			
+			if ( oysterReferenceSource.getDelimiter() != null && oysterReferenceSource.getDelimiter() != "" ){
+			OysterSourceDescriptorXml
+					.append("<Source Type=\"FileDelim\" Char=\""
+							+ oysterReferenceSource.getDelimiter()
+							+ "\" Qual=\""
+							+ oysterReferenceSource.getQualifier()
+							+ "\" Labels=\"" + label + "\">"
+							+ oysterReferenceSource.getSourcePath()
+							+ "</Source>");
+			}
+			
+			else{
+				JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "Please choose a delimeter for your file.", "Error!", 0);
+				tableSourceDescriptor_FileDelim.changeSelection(0, 2, false, false);
+				tableSourceDescriptor_FileDelim.setBorder(new LineBorder(Color.RED, 1));
+				tableSourceDescriptor_FileDelim.requestFocus();
+				error = true;
+			}
+			//tableUsed = tableSourceDescriptor_FileDelim;
+		}
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("    ");
+		OysterSourceDescriptorXml
+				.append("<!-- Items in Source (One for each item in the source including reference identifier) -->");
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("    ");
+		OysterSourceDescriptorXml.append("<ReferenceItems>");
+		OysterSourceDescriptorXml.append("\n");
+		// Add Items
+
+		OysterSourceDescriptorXml.append("    ");
+		
+		ArrayList<OysterReferenceItem> oysterReferenceItem = oysterReferenceSource
+		.getOysterReferenceItems();
+		
+		if ( sourceType == "Database") {
+			for (int i = 0; i < oysterReferenceItem.size(); i++) {
+				OysterSourceDescriptorXml.append("    ");
+				OysterSourceDescriptorXml.append("<Item Name=\""
+						+ oysterReferenceItem.get(i).getName());
+				OysterSourceDescriptorXml.append("\" Attribute=\""
+						+ oysterReferenceItem.get(i).getAttribute());
+				OysterSourceDescriptorXml.append("\"/>");
+				OysterSourceDescriptorXml.append("\n");			
+				OysterSourceDescriptorXml.append("    ");		
+			}
+		} else if ( sourceType == "FileFixed" ) {
+			for (int i = 0; i < oysterReferenceItem.size(); i++) {
+				OysterSourceDescriptorXml.append("    ");
+				OysterSourceDescriptorXml.append("<Item Name=\""
+						+ oysterReferenceItem.get(i).getName());
+				OysterSourceDescriptorXml.append("\" Attribute=\""
+						+ oysterReferenceItem.get(i).getAttribute());
+				OysterSourceDescriptorXml.append("\" Start=\""
+						+ oysterReferenceItem.get(i).getStart());
+				OysterSourceDescriptorXml.append("\" End=\""
+						+ oysterReferenceItem.get(i).getEnd());
+				OysterSourceDescriptorXml.append("\"/>");
+				OysterSourceDescriptorXml.append("\n");			
+				OysterSourceDescriptorXml.append("    ");
+			}
+		} else if ( sourceType == "FileDelim" ) {			
+			for (int i = 0; i < oysterReferenceItem.size(); i++) {
+				OysterSourceDescriptorXml.append("    ");
+				OysterSourceDescriptorXml.append("<Item Name=\""
+						+ oysterReferenceItem.get(i).getName());
+				OysterSourceDescriptorXml.append("\" Attribute=\""
+						+ oysterReferenceItem.get(i).getAttribute());
+				OysterSourceDescriptorXml.append("\" Pos=\""
+						+ oysterReferenceItem.get(i).getPos());
+				OysterSourceDescriptorXml.append("\"/>");
+				OysterSourceDescriptorXml.append("\n");			
+				OysterSourceDescriptorXml.append("    ");				
+			}
+		}
+		
+		//
+		OysterSourceDescriptorXml.append("</ReferenceItems>");
+		OysterSourceDescriptorXml.append("\n");
+		OysterSourceDescriptorXml.append("</OysterSourceDescriptor>");
+
+		if (!error){
+		JOptionPane.showMessageDialog(frm_OysterGUIScriptor, OysterSourceDescriptorXml.toString(),"Current XML Status", 1);
+		//tableUsed.setBorder(null);
+		tableSourceDescriptor_FileDelim.changeSelection(0, 2, true, false);
+		}
+	}
+
+	private void CheckSourceDescriptorErrors(){
 		error = false;
 		InUse errors = new TableConstraintChecker.InUse();
 		TableConstraintChecker tcc = new TableConstraintChecker();
-		JTable tableUsed = null;
+	
 		
 		if(tabbedPaneSourceDescriptor_Sources.getSelectedIndex() == 1){
 			errors = tcc.CheckAttributes(tableSourceDescriptor_DetailFileFixed);
@@ -3646,34 +3448,52 @@ public class OysterRun {
 						JOptionPane.showMessageDialog(null, "Please check that all fields have a value.", "Error!", 0);
 						error = true;
 					}
-				if( errors.isMatchFound() ){
-					if ( errors.hasDuplicates() ){
-						JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You have duplicate numbers in 'Start' or 'End' for some attributes!", "Error!", 0);
-					}
-					else if ( errors.hasInvertedRange() ){
-						JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You have inverted 'Start' and 'End' values for some attributes!", "Error!", 0);
-					}
-					else if (errors.hasOverlapRange() ){
-						JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You have overlapping 'Start' to 'End' ranges for some attributes!", "Error!", 0);
-					}
-		
-						error = true;
-					}
-					else 
-						if (!error){
-						errors = tcc.CheckNames(tableSourceDescriptor_DetailFileFixed);
-						
-						if( errors.isMatchFound() ){
-							if ( errors.hasNullsOrEmpties() ){
-								JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You must enter a logical name for attributes!", "Error!", 0);
-							}
-							else{	
-								JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You have entered the same logical name for multiple attributes!", "Error!", 0);
-							}
-							error = true;
-						}
 					
-					}
+					if( errors.isMatchFound() ){
+						if ( errors.hasDuplicates() ){
+							JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You have duplicate numbers in 'Start' or 'End' for some attributes!", "Error!", 0);
+						}
+						else if ( errors.hasInvertedRange() ){
+							JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You have inverted 'Start' and 'End' values for some attributes!", "Error!", 0);
+						}
+						else if (errors.hasOverlapRange() ){
+							JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You have overlapping 'Start' to 'End' ranges for some attributes!", "Error!", 0);
+						}
+			
+						error = true;
+						}
+						else 
+							if (!error){
+								errors = tcc.CheckNames(tableSourceDescriptor_DetailFileFixed);
+								
+								if( errors.isMatchFound() ){
+									if ( errors.hasNullsOrEmpties() ){
+										JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You must enter a logical name for attributes!", "Error!", 0);
+									}
+									else{	
+										JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You have entered the same logical name for multiple attributes!", "Error!", 0);
+									}
+									error = true;
+								}
+						
+							}
+/* REFID Error*/
+//				     if (!error){
+//					    	
+//				    	 if( tableSourceDescriptor_DetailDatabase.isShowing() ){
+//				    		 errors = tcc.CheckREFID(tableSourceDescriptor_DetailDatabase);
+//				    	 }else if ( tableSourceDescriptor_DetailFileDelim.isShowing() ){
+//				    		 errors = tcc.CheckREFID(tableSourceDescriptor_DetailFileDelim);
+//				    	 }else if ( tableSourceDescriptor_DetailFileFixed.isShowing() ){
+//				    		 errors = tcc.CheckREFID(tableSourceDescriptor_DetailFileFixed);
+//				    	 }
+//				    	 
+//						if ( !errors.hasREFID() ){
+//							JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "You must add a @REFID attribute", "Error!", 0);
+//							error = true;
+//						}
+//				     }
+
 				}
 			
 			}
@@ -3742,161 +3562,8 @@ public class OysterRun {
 				}
 			}
 		}
-		
-		// clear the Stringbuffer content
-		OysterSourceDescriptorXml.delete(0, OysterSourceDescriptorXml.length());
-
-		// XML Declaration and Comments
-		OysterSourceDescriptorXml
-				.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("<!--");
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml.append("Document: ");
-		OysterSourceDescriptorXml.append(commentSourceDescriptor.getDocument());
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml.append("Created on: ");
-		OysterSourceDescriptorXml
-				.append(commentSourceDescriptor.getCreatedOn());
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml.append("Author: ");
-		OysterSourceDescriptorXml.append(commentSourceDescriptor.getAuthor());
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml.append("Description: ");
-		OysterSourceDescriptorXml.append(commentSourceDescriptor
-				.getDescription());
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("-->");
-		OysterSourceDescriptorXml.append("\n");
-
-		// <OysterRunScript> start Tag
-		OysterSourceDescriptorXml.append("<OysterSourceDescriptor>");
-		OysterSourceDescriptorXml.append("\n");
-
-		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml
-				.append("<!-- Types of Sources (Only one can be defined) -->");
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("    ");
-
-		String sourceType = oysterReferenceSource.getSourceType();
-
-		if (sourceType == "Database") {
-
-			OysterSourceDescriptorXml.append("<Source Type=\"Database\" SID=\"" + oysterReferenceSource.getSid() + "\" UserID=\"" 
-					+ oysterReferenceSource.getUserID() + "\" Passwd=\"" + oysterReferenceSource.getPasswd() + "\" CType=\"" 
-					+ oysterReferenceSource.getConnectionType() + "\">" + oysterReferenceSource.getTable() + "</Source>");
-				
-			tableUsed = tableSourceDescriptor_Database;
-			
-		} else if (sourceType == "FileFixed") {
-			OysterSourceDescriptorXml
-			.append("<Source Type=\"FileFixed\">"
-					+ oysterReferenceSource.getSourcePath()
-					+ "</Source>");
-			
-			tableUsed = tableSourceDescriptor_FileFixed;
-			
-		} else if (sourceType == "FileDelim") {
-			String label;
-			if(oysterReferenceSource.isLabel())
-				label = "Y";
-			else
-				label = "N";
-			
-			if ( oysterReferenceSource.getDelimiter() != null && oysterReferenceSource.getDelimiter() != "" ){
-			OysterSourceDescriptorXml
-					.append("<Source Type=\"FileDelim\" Char=\""
-							+ oysterReferenceSource.getDelimiter()
-							+ "\" Qual=\""
-							+ oysterReferenceSource.getQualifier()
-							+ "\" Labels=\"" + label + "\">"
-							+ oysterReferenceSource.getSourcePath()
-							+ "</Source>");
-			}
-			
-			else{
-				JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "Please choose a delimeter for your file.", "Error!", 0);
-				tableSourceDescriptor_FileDelim.changeSelection(0, 2, false, false);
-				tableSourceDescriptor_FileDelim.setBorder(new LineBorder(Color.RED, 1));
-				tableSourceDescriptor_FileDelim.requestFocus();
-				error = true;
-			}
-			tableUsed = tableSourceDescriptor_FileDelim;
-		}
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml
-				.append("<!-- Items in Source (One for each item in the source including reference identifier) -->");
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("    ");
-		OysterSourceDescriptorXml.append("<ReferenceItems>");
-		OysterSourceDescriptorXml.append("\n");
-		// Add Items
-
-		OysterSourceDescriptorXml.append("    ");
-		
-		ArrayList<OysterReferenceItem> oysterReferenceItem = oysterReferenceSource
-		.getOysterReferenceItems();
-		
-		if ( sourceType == "Database") {
-			for (int i = 0; i < oysterReferenceItem.size(); i++) {
-				OysterSourceDescriptorXml.append("    ");
-				OysterSourceDescriptorXml.append("<Item Name=\""
-						+ oysterReferenceItem.get(i).getName());
-				OysterSourceDescriptorXml.append("\" Attribute=\""
-						+ oysterReferenceItem.get(i).getAttribute());
-				OysterSourceDescriptorXml.append("\"/>");
-				OysterSourceDescriptorXml.append("\n");			
-				OysterSourceDescriptorXml.append("    ");		
-			}
-		} else if ( sourceType == "FileFixed" ) {
-			for (int i = 0; i < oysterReferenceItem.size(); i++) {
-				OysterSourceDescriptorXml.append("    ");
-				OysterSourceDescriptorXml.append("<Item Name=\""
-						+ oysterReferenceItem.get(i).getName());
-				OysterSourceDescriptorXml.append("\" Attribute=\""
-						+ oysterReferenceItem.get(i).getAttribute());
-				OysterSourceDescriptorXml.append("\" Start=\""
-						+ oysterReferenceItem.get(i).getStart());
-				OysterSourceDescriptorXml.append("\" End=\""
-						+ oysterReferenceItem.get(i).getEnd());
-				OysterSourceDescriptorXml.append("\"/>");
-				OysterSourceDescriptorXml.append("\n");			
-				OysterSourceDescriptorXml.append("    ");
-			}
-		} else if ( sourceType == "FileDelim" ) {			
-			for (int i = 0; i < oysterReferenceItem.size(); i++) {
-				OysterSourceDescriptorXml.append("    ");
-				OysterSourceDescriptorXml.append("<Item Name=\""
-						+ oysterReferenceItem.get(i).getName());
-				OysterSourceDescriptorXml.append("\" Attribute=\""
-						+ oysterReferenceItem.get(i).getAttribute());
-				OysterSourceDescriptorXml.append("\" Pos=\""
-						+ oysterReferenceItem.get(i).getPos());
-				OysterSourceDescriptorXml.append("\"/>");
-				OysterSourceDescriptorXml.append("\n");			
-				OysterSourceDescriptorXml.append("    ");				
-			}
-		}
-		
-		//
-		OysterSourceDescriptorXml.append("</ReferenceItems>");
-		OysterSourceDescriptorXml.append("\n");
-		OysterSourceDescriptorXml.append("</OysterSourceDescriptor>");
-
-		if (!error){
-		JOptionPane.showMessageDialog(frm_OysterGUIScriptor, OysterSourceDescriptorXml.toString(),"Current XML Status", 1);
-		tableUsed.setBorder(null);
-		tableSourceDescriptor_FileDelim.changeSelection(0, 2, true, false);
-		}
 	}
-
+	
 	private void saveSourceDescriptor() {
 		/*
 		 * Comments
@@ -3998,7 +3665,7 @@ public class OysterRun {
 				}
 				catch(ClassCastException cce){
 					if (!error){
-					//JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "Please check every drop down box and remove any unused attributes.", "Error!", 0);
+						//JOptionPane.showMessageDialog(frm_OysterGUIScriptor, "Please check every drop down box and remove any unused attributes.", "Error!", 0);
 					}
 					break;
 				}
@@ -4162,7 +3829,7 @@ public class OysterRun {
 		return btnRunScript_ReferenceSourcesRemove;
 	}
 
-	private void XMLtoDescription(File file, JTable table) {
+	private void XMLtoDescription(File file, OysterTable table) {
 
 		DefaultTableModel tm = (DefaultTableModel) table.getModel();
 
@@ -4210,9 +3877,9 @@ public class OysterRun {
 
 	}
 
-	protected void FillDetailTables(JTable table, int RowNum) {
+	protected void FillDetailTables(OysterTable table, int RowNum) {
 		
-		final DefaultTableModel tm = (DefaultTableModel) table.getModel();
+		DefaultTableModel tm = (DefaultTableModel) table.getModel();
 		DefaultComboBoxModel bcbm = new DefaultComboBoxModel();
 			
 		Hashtable<OysterAttribute, OysterComparator> attrComp = attributes
@@ -4251,107 +3918,8 @@ public class OysterRun {
 		str = null;
 	
 	}
-		
-	private void ClearTable(JTable table) {
-		DefaultTableModel dftm = (DefaultTableModel) table.getModel();
-
-		while (dftm.getRowCount() > 0) {
-			dftm.removeRow(0);
-		}
-	}
 	
-	private void ClearSelectedRow(JTable table)
-	{
-	
-		DefaultTableModel dftm = (DefaultTableModel) table.getModel();
-		if ( table.getSelectedRow() > -1 ){
-			dftm.removeRow( table.getSelectedRow() );	
-		}
-		//TODO: Add support for multiple rows.
-	}
-
-	private JButton getBtnAddDetail() {
-		if (btnAddDetail == null) {
-			btnAddDetail = new JButton("Add Detail");
-			btnAddDetail.setEnabled(false);
-			btnAddDetail.addActionListener(new BtnAddDetailAction());
-			btnAddDetail.setBounds(575, 192, 158, 28);
-		}
-		return btnAddDetail;
-	}
-	
-	private void AddDetailRow(JTable table, int rowNum){
-		
-		DefaultTableModel tm = (DefaultTableModel) table.getModel();
-		Object[] insertion = {};
-		tm.insertRow(rowNum, insertion);
-		
-	}
-	
-	private class BtnAddDetailAction implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			
-			if ( tableSourceDescriptor_DetailDatabase.isShowing() ){
-				
-				tableSourceDescriptor_DetailDatabase_RowNum = tableSourceDescriptor_DetailDatabase
-				.getRowCount();
-				AddDetailRow( tableSourceDescriptor_DetailDatabase,
-						tableSourceDescriptor_DetailDatabase_RowNum);
-				tableSourceDescriptor_DetailDatabase_RowNum = tableSourceDescriptor_DetailDatabase
-						.getRowCount();
-			}
-			else if ( tableSourceDescriptor_DetailFileDelim.isShowing() ){
-				
-				tableSourceDescriptor_DetailFileDelim_RowNum = tableSourceDescriptor_DetailFileDelim
-				.getRowCount();
-				AddDetailRow(tableSourceDescriptor_DetailFileDelim,
-						tableSourceDescriptor_DetailFileDelim_RowNum);
-				tableSourceDescriptor_DetailFileDelim_RowNum = tableSourceDescriptor_DetailFileDelim
-						.getRowCount();
-			}
-			else if ( tableSourceDescriptor_DetailFileFixed.isShowing() ){
-				
-				tableSourceDescriptor_DetailFileFixed_RowNum = tableSourceDescriptor_DetailFileFixed
-						.getRowCount();
-				AddDetailRow(tableSourceDescriptor_DetailFileFixed,
-						tableSourceDescriptor_DetailFileFixed_RowNum);
-				tableSourceDescriptor_DetailFileFixed_RowNum = tableSourceDescriptor_DetailFileFixed
-						.getRowCount();
-			}
-			btnClearAllAttributes.setEnabled(true);
-
-		}
-	}
-	
-	private JButton getBtnClearAllAttributes() {
-		if (btnClearAllAttributes == null) {
-			btnClearAllAttributes = new JButton("Clear All Attributes");
-			btnClearAllAttributes.setEnabled(false);
-			btnClearAllAttributes.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					
-					ClearTable(tableSourceDescriptor_DetailDatabase);
-					tableSourceDescriptor_DetailDatabase_RowNum = 0;
-					
-					ClearTable(tableSourceDescriptor_DetailFileFixed);
-					tableSourceDescriptor_DetailFileFixed_RowNum = 0;
-			
-					ClearTable(tableSourceDescriptor_DetailFileDelim);
-					tableSourceDescriptor_DetailFileDelim_RowNum = 0;
-					
-					btnClearAllAttributes.setEnabled(false);
-					btnAddDetail.setEnabled(false);
-					btnRemoveDetail.setEnabled(false);
-					
-					lblSourceDescriptor_Attributes.setText( "Attributes Loaded: 0");
-				}
-			});
-			btnClearAllAttributes.setBounds(575, 254, 158, 28);
-		}
-		return btnClearAllAttributes;
-	}
-
-	private class ComboBoxRenderer extends JComboBox implements TableCellRenderer {
+	public class ComboBoxRenderer extends JComboBox implements TableCellRenderer {
 		   
 		public ComboBoxRenderer(String[] items) {
 		        super(items);
@@ -4372,6 +3940,61 @@ public class OysterRun {
 		    }
 		}
 	
+	private JButton getBtnAddDetail() {
+		if (btnAddDetail == null) {
+			btnAddDetail = new JButton("Add Detail");
+			btnAddDetail.setEnabled(false);
+			btnAddDetail.addActionListener(new BtnAddDetailAction());
+			btnAddDetail.setBounds(575, 192, 158, 28);
+		}
+		return btnAddDetail;
+	}
+		
+	private class BtnAddDetailAction implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			
+			if ( tableSourceDescriptor_DetailDatabase.isShowing() ){				
+				tableSourceDescriptor_DetailDatabase.AddDetailRow();
+			}
+			else if ( tableSourceDescriptor_DetailFileDelim.isShowing() ){				
+				tableSourceDescriptor_DetailFileDelim.AddDetailRow();
+			}
+			else if ( tableSourceDescriptor_DetailFileFixed.isShowing() ){
+				tableSourceDescriptor_DetailFileFixed.AddDetailRow();
+			}
+			btnClearAllAttributes.setEnabled(true);
+
+		}
+	}
+	
+	private JButton getBtnClearAllAttributes() {
+		if (btnClearAllAttributes == null) {
+			btnClearAllAttributes = new JButton("Clear All Attributes");
+			btnClearAllAttributes.setEnabled(false);
+			btnClearAllAttributes.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					
+					tableSourceDescriptor_DetailDatabase.ClearTable();
+					tableSourceDescriptor_DetailDatabase_RowNum = 0;
+					
+					tableSourceDescriptor_DetailFileFixed.ClearTable();
+					tableSourceDescriptor_DetailFileFixed_RowNum = 0;
+			
+					tableSourceDescriptor_DetailFileDelim.ClearTable();
+					tableSourceDescriptor_DetailFileDelim_RowNum = 0;
+					
+					btnClearAllAttributes.setEnabled(false);
+					btnAddDetail.setEnabled(false);
+					btnRemoveDetail.setEnabled(false);
+					
+					lblSourceDescriptor_Attributes.setText( "Attributes Loaded: 0");
+				}
+			});
+			btnClearAllAttributes.setBounds(575, 254, 158, 28);
+		}
+		return btnClearAllAttributes;
+	}
+
 	private boolean CheckRunConstraints() {
 		boolean hasError = false;
 		
@@ -4396,38 +4019,8 @@ public class OysterRun {
 		
 		return hasError;
 	}
-	
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setBounds(437, 11, 232, 20);
-			textField.setColumns(10);
-		}
-		return textField;
-	}
-	
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel_1.setBounds(695, 140, 109, 98);
-			panel_1.setLayout(null);
-			
-			JButton btnRemoveRule = new JButton("Remove Rule");
-			btnRemoveRule.setBounds(7, 11, 95, 23);
-			panel_1.add(btnRemoveRule);
-			
-			JButton btnEditRule = new JButton("Edit Rule");
-			btnEditRule.setBounds(7, 39, 95, 23);
-			panel_1.add(btnEditRule);
-			
-			JButton btnClearRules = new JButton("Clear Rules");
-			btnClearRules.setBounds(7, 67, 95, 23);
-			panel_1.add(btnClearRules);
-		}
-		return panel_1;
-	}
 }
+	
 
 
  

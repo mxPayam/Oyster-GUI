@@ -19,6 +19,7 @@ public class TableConstraintChecker {
 		private boolean hasInvertedRange = false;
 		private boolean hasOverlapRange = false;
 		private boolean hasDuplicates = false;
+		private boolean hasREFID = false;
 		
 		public ArrayList<Integer> getRows(){
 			return problemRows;
@@ -47,6 +48,11 @@ public class TableConstraintChecker {
 		public boolean hasDuplicates(){
 			return hasDuplicates;
 		}
+		
+		public boolean hasREFID(){
+			return hasREFID;
+		}
+		
 		private void setProblemRows(ArrayList<Integer> problems){
 			problemRows = problems;
 		}
@@ -73,6 +79,10 @@ public class TableConstraintChecker {
 		
 		private void setDuplicateFound(boolean b){
 			hasDuplicates = b;
+		}
+		
+		private void setREFID(boolean b){
+			hasREFID = b;
 		}
 		
 		public void setFalse(){
@@ -288,6 +298,27 @@ public class TableConstraintChecker {
 			used.setProblemRows(problemRows);
 		}
 		
+		return used;
+	}
+
+	
+	public InUse CheckREFID(JTable t){
+		
+		InUse used = new InUse();
+		boolean foundREFID = false;
+		
+		for (int i = 0; i < t.getRowCount(); i ++){
+			
+			 String check = t.getCellEditor(i, 1).getCellEditorValue().toString();
+			 System.out.println(check);
+			 if (check == "@RefID"){
+				 foundREFID = true;
+				 break;
+			 }
+			 
+			
+		}
+		used.setREFID(foundREFID);
 		return used;
 	}
 }
