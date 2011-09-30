@@ -27,6 +27,11 @@ package edu.ualr.oyster.gui;
  */
 public class OysterEnum {
 
+	public static enum MatchType {
+		Exact, Missing, Transpose, Close
+	}
+	
+
 	public static enum SourceType {
 		None, FileFixed, FileDelim, Database
 	}
@@ -167,4 +172,6 @@ public class OysterEnum {
 		 */
 		// Database
 	}
+
+	public static final String[] MatchType = null;
 }

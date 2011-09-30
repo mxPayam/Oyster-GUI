@@ -21,10 +21,10 @@ import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 
+import edu.ualr.oyster.gui.OysterEnum.MatchType;
 
 public class OysterAttributesPanel extends JPanel {
 
@@ -350,8 +350,6 @@ public class OysterAttributesPanel extends JPanel {
 		});
 		pnl_Attributes.add(btn_ClearAttributes);
 		
-		OysterRun.btnSave.setText("Save Attributes");
-		OysterRun.btnSave.setEnabled(false);
 		
 		/*
 		 * Initialization Methods
@@ -397,19 +395,14 @@ public class OysterAttributesPanel extends JPanel {
 	}
 	
 	private String[] getMatchOptions(){
-		String[] str = {"EXACT", "APROXIMATE"}; 
 		
+		String[] str = {"Exact", "Missing", "Transpose", "Close"};
+			
+		/* No Enum Support? */
+		//OysterEnum.MatchType;
 		return str;
 	}
 	
-	private class Panel_OysterAttributesComponent extends ComponentAdapter {
-		@Override
-		public void componentShown(ComponentEvent arg0) {
-			OysterRun.btnSave.setText("Save Attributes");
-			OysterRun.btnSave.setEnabled(false);
-		}
-	}
-
 
 	/*
 	 * Code Behind

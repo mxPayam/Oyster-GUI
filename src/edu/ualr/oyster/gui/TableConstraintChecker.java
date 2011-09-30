@@ -2,8 +2,6 @@ package edu.ualr.oyster.gui;
 
 import java.util.ArrayList;
 
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 
@@ -192,6 +190,42 @@ public class TableConstraintChecker {
 	}
 	
 
+	public InUse CheckStringMatches(JTable t){
+		InUse used = new InUse();
+		
+		boolean problemFound = false;
+		int rows = t.getRowCount();
+		String[] rowValues = new String[rows];
+		ArrayList<Integer> problemRows = new ArrayList<Integer>();
+		
+		//Load row values into rowValues
+		for (int i=0; i < rows; i++){
+			rowValues[i] =  (String) t.getModel().getValueAt(i, 1);
+		}
+
+		
+		for (int i=0; i < rowValues.length; i++){
+			for ( int n=0; n < rowValues.length; n++){
+				if (i != n){
+					if (rowValues[i].equals(rowValues[n])){
+						problemFound = true;
+						problemRows.add(n);
+					}
+				}
+			}
+		}
+		
+		if (problemFound){
+			used.setMatchFound(true);
+			used.setDuplicateFound(true);
+			used.setProblemRows(problemRows);		 
+		}
+		
+		return used; 
+		
+	}
+	
+	
 	public InUse CheckNames(JTable t){
 		InUse used = new InUse();
 		
@@ -306,15 +340,12 @@ public class TableConstraintChecker {
 		
 		InUse used = new InUse();
 		boolean foundREFID = false;
-		
 		for (int i = 0; i < t.getRowCount(); i ++){
-			
-			 String check = t.getCellEditor(i, 1).getCellEditorValue().toString();
-			 System.out.println(check);
-			 if (check == "@RefID"){
-				 foundREFID = true;
-				 break;
-			 }
+			String check = (String) t.getValueAt(i, 1);
+			if ( check.equals("@RefID") ){
+				foundREFID = true;
+				break;
+			}
 			 
 			
 		}

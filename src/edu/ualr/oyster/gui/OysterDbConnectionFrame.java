@@ -112,10 +112,11 @@ public class OysterDbConnectionFrame extends JFrame {
 		tag = tagsource;
 		setResizable(false);
 		setTitle(tag + " DB Config");
-		setBounds(100, 100, 274, 402);
-		contentPane = new JPanel();
-
+		
 		this.setAlwaysOnTop(true);
+		this.setBounds(800, 300, 274, 402);
+		
+		contentPane = new JPanel();
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

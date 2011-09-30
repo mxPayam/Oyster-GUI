@@ -14,6 +14,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.text.TableView.TableCell;
 
 
 
@@ -136,6 +137,11 @@ public class OysterTable extends JTable{
 		        return this;
 		    }
 		}
+	
+	public void setComboBoxEditor(int row, int col){
+		
+		
+	}
 	
 	public class ComboBoxEditor extends AbstractCellEditor implements TableCellEditor{
 

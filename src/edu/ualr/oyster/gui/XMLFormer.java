@@ -2,6 +2,9 @@ package edu.ualr.oyster.gui;
 
 import java.util.ArrayList;
 
+import edu.ualr.oyster.gui.OysterEnum.IdentityInputType;
+import edu.ualr.oyster.gui.OysterEnum.IdentityOutputType;
+import edu.ualr.oyster.gui.OysterEnum.LinkOutputType;
 import edu.ualr.oyster.gui.core.OysterAttributes;
 import edu.ualr.oyster.gui.core.OysterReferenceItem;
 import edu.ualr.oyster.gui.core.OysterReferenceSource;
@@ -131,14 +134,182 @@ public class XMLFormer {
 		return sourceDescriptorXML.toString();
 	}
 
-	public String FormRun(OysterRunScript.Comments commentSourceDescriptor, OysterRunScript runScript){
+	public String FormRun(OysterRunScript.Comments commentRunScript, 
+			OysterRunScript.LogSettings logSettings, OysterRunScript.LogFile logFile, OysterRunScript.AttributePath attributePath,
+			OysterRunScript.EREngine erEngine, OysterRunScript.IdentityInput identityInput,OysterRunScript.IdentityOutput identityOutput,
+			OysterRunScript.LinkOutput linkOutput, OysterTable tableRunScript_ReferenceSources){
 		
 		StringBuffer runXML = new StringBuffer(""); 	
 		runXML.delete(0, runXML.length());
 		
-		runXML.append( FormComments(commentSourceDescriptor) );
+		runXML.append( FormComments(commentRunScript) );
+		// clear the StringBuffer content
+		runXML.delete(0, runXML.length());
+
+		// XML Declaration and Comments
+		runXML.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		runXML.append("\n");
+		runXML.append("<!--");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("Document: ");
+		runXML.append(commentRunScript.getDocument());
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("Created on: ");
+		runXML.append(commentRunScript.getCreatedOn());
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("Author: ");
+		runXML.append(commentRunScript.getAuthor());
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("Description: ");
+		runXML.append(commentRunScript.getDescription());
+		runXML.append("\n");
+		runXML.append("-->");
+		runXML.append("\n");
+
+		// <OysterRunScript> start Tag
+		runXML.append("<OysterRunScript>");
+		runXML.append("\n");
+
+		// Log Settings
+		runXML.append("    ");
+		runXML.append("<Settings Explanation=\""
+				+ logSettings.getLogExplanation() + "\" Debug=\""
+				+ logSettings.getLogDebug() + "\" />");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("    ");
+		runXML.append("    ");
+		runXML.append("<LogFile Num=\"").append(logFile.getNum())
+				.append("\" Size=\"").append(logFile.getSize()).append("\">")
+				.append(logFile.getLogDirectory())
+				.append("\\Run_%g.log</LogFile>");
+
+		// EREngine Type
+		runXML.append("\n");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("<EREngine Type=\"")
+				.append(erEngine.getType()).append("\" />");
+
+		// Attributes Path
+		runXML.append("\n");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("<!-- Attributes read from file only -->");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("<AttributePath>")
+				.append(attributePath.getAttributePath())
+				.append("</AttributePath>");
+
+		// Identity Input
+		runXML.append("\n");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("<!-- Identity Input Selection -->");
+		runXML.append("\n");
+		runXML.append("    ");
+		if (identityInput.getType() == IdentityInputType.None) {
+			runXML.append("<IdentityInput Type=\""
+					+ IdentityInputType.None.toString() + "\">"
+					+ "</IdentityInput>");
+		} else if (identityInput.getType() == IdentityInputType.TextFile) {
+			runXML.append("<IdentityInput Type=\""
+					+ IdentityInputType.TextFile.toString() + "\">"
+					+ identityInput.getAbsolutePath() + "</IdentityInput>");
+		}
+		// else if (identityInput.getType() == IdentityInputType.Database) {
+		// runXML
+		// .append("<IdentityInput Type=\""
+		// + IdentityInputType.Database + "\" Server=\""
+		// + dbConfigIdentityInput.getServer() + "\" Port=\""
+		// + dbConfigIdentityInput.getPort() + "\" SID=\""
+		// + dbConfigIdentityInput.getSID() + "\" UserID=\""
+		// + dbConfigIdentityInput.getUserID()
+		// + "\" Passwd=\""
+		// + dbConfigIdentityInput.getPassword() + "\">"
+		// + dbConfigIdentityInput.getTableName()
+		// + "</IdentityInput>");
+		// }
+
+		// Identity Output
+		runXML.append("\n");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML
+				.append("<!-- Identity Output Selection (Only needed when CaptureMode=On) -->");
+		runXML.append("\n");
+		runXML.append("    ");
 		
-		
+		if (identityOutput.getType() == IdentityOutputType.None ||  identityOutput.getType() == null) {
+			runXML.append("<IdentityOutput Type=\""
+					+ IdentityOutputType.None.toString() + "\">"
+					+ "</IdentityOutput>");
+		} else if (identityOutput.getType() == IdentityOutputType.TextFile) {
+			runXML.append("<IdentityOutput Type=\""
+					+ IdentityOutputType.TextFile.toString() + "\">"
+					+ identityOutput.getAbsolutePath() + "</IdentityOutput>");
+			// + "\\IdentityOutput.idty</IdentityOutput>");
+		}
+
+		// Link Output
+		runXML.append("\n");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML
+				.append("<!-- Link Output Selection (Only needed when CaptureMode=On) -->");
+		runXML.append("\n");
+		runXML.append("    ");
+		if ( linkOutput.getAbsolutePath().trim().equals("Absolute Path to Oyster Link Output") || linkOutput.getAbsolutePath().trim().equals("") ){
+			
+		}
+		else{
+		runXML.append("<LinkOutput Type=\""
+				+ LinkOutputType.TextFile.toString() + "\">"
+				+ linkOutput.getAbsolutePath()
+				// + "\\LinkOutput.link</LinkOutput>");
+				+ "</LinkOutput>");
+		}
+
+		// Reference Sources
+		runXML.append("\n");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("<!-- Sources to Run -->");
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("<ReferenceSources>");
+
+		// Reference Items
+		for (int i = 0; i < tableRunScript_ReferenceSources.getRowCount(); i++) {
+			// if (tableRunScript_ReferenceSources.getValueAt(i, 0) != null)
+			String capture = "No";
+			if (tableRunScript_ReferenceSources.getValueAt(i, 0).toString() == "true") {
+				// CaptureMode
+				if (tableRunScript_ReferenceSources.getValueAt(i, 0) != null)
+					if (tableRunScript_ReferenceSources.getValueAt(i, 0)
+							.toString() == "true")
+						capture = "Yes";
+			}
+			// Path
+			runXML.append("\n");
+			runXML.append("    ");
+			runXML.append("    ");
+			runXML.append("<Source Capture=\"" + capture + "\">"
+					+ tableRunScript_ReferenceSources.getValueAt(i, 3)
+					+ "</Source>");
+
+		}
+		runXML.append("\n");
+		runXML.append("    ");
+		runXML.append("</ReferenceSources>");
+		runXML.append("\n");
+		runXML.append("</OysterRunScript>");
+
 		return runXML.toString();
 	}
 	
